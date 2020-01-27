@@ -8,13 +8,12 @@
                 <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
             </ul>
             <ul class="header-links pull-right">
-                <li><a href="#"><i class="fa fa-user-o"></i>
+                <li><a id="btn-user-account" href="{{route('auth.login')}}"><i class="fa fa-user-o"></i>
                         @if(Auth::check())
                             {{auth()->user()->name}}
                         @else
                             Mi cuenta
                         @endif
-
                     </a>
                 </li>
             </ul>
@@ -42,7 +41,7 @@
                 <div class="col-md-6">
                     <div class="header-search">
                         <form>
-                            <input class="input" placeholder="Escribe aquí">
+                            <input name="key" class="input" placeholder="Escribe aquí">
                             <button class="search-btn"><i class="fa fa-search"></i> Buscar</button>
                         </form>
                     </div>

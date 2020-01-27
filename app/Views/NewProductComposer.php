@@ -8,22 +8,18 @@
 
 namespace App\Views;
 
-
-use App\Models\Product;
+use App\Services\CacheService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class NewProductComposer
 {
     public function compose(View $view){
-        $products = Product::where('active',1)
-            ->take(20)
-            ->get([
-            'id',
-            'name',
-            'price',
-            'discount',
-            'img_url_1'
-        ]);
+        $products=collect();
+        if( ! Auth::check()){
+            $products = CacheService::notAuthNewProducts();
+        }
+
 
         return $view->with('products',$products);
     }

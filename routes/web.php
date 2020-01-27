@@ -19,4 +19,8 @@ Route::group(['prefix'=>'product'],function (){
     Route::get('detail/{product?}','ProductController@productDetail')->name('product.detail');
 });
 
+Route::group(['prefix'=>'auth'],function (){
+    Route::get('login','AuthenticateController@login')->name('auth.login');
+});
+
 

@@ -9,12 +9,13 @@
 namespace App\Views;
 
 use App\Models\Navigation;
+use App\Services\CacheService;
 use Illuminate\View\View;
 
 class NavigationComposer
 {
     public function compose(View $view){
-        $navigations = Navigation::active()->get(['name']);
+        $navigations = CacheService::navigation();
         return $view->with('navigations',$navigations);
     }
 }
