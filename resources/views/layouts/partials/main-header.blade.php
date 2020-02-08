@@ -29,7 +29,7 @@
             <div class="row">
                 <!-- LOGO -->
                 <div class="col-md-3">
-                    <div class="header-logo">
+                    <div data-url="{{route('home')}}" class="header-logo">
                         <a href="#" class="logo">
                             <img src="{{URL::asset('public/img/logo.png')}}" alt="">
                         </a>
@@ -38,7 +38,7 @@
                 <!-- /LOGO -->
 
                 <!-- SEARCH BAR -->
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="header-search">
                         <form>
                             <input name="key" class="input" placeholder="Escribe aquí">
@@ -49,16 +49,26 @@
                 <!-- /SEARCH BAR -->
 
                 <!-- ACCOUNT -->
-                <div class="col-md-3 clearfix">
+                <div class="col-md-4 clearfix">
                     <div class="header-ctn">
                         <!-- Wishlist -->
+
                         <div>
                             <a href="#">
-                                <i class="fa fa-heart-o"></i>
-                                <span>Mis favoritos</span>
+                                <i class="fa fa-comment"></i>
+                                <span>Mensajes</span>
                                 <div class="qty">2</div>
                             </a>
                         </div>
+
+                        <div>
+                            <a href="#">
+                                <i class="fa fa-heart"></i>
+                                <span>Mis Favoritos</span>
+                                <div class="qty">2</div>
+                            </a>
+                        </div>
+
                         <!-- /Wishlist -->
 
                         <!-- Cart -->

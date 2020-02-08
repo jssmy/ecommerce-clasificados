@@ -40,8 +40,9 @@
 <body>
 <!-- HEADER -->
 @include('layouts.partials.main-header')
-@include('layouts.partials.navigation.main-navigation')
-<div id="content" class="section">
+@include('layouts.navigation.main-navigation')
+@yield('breadcrumb')
+<div id="content">
     @yield('content')
 </div>
 @include('layouts.partials.main-footer')
@@ -54,7 +55,6 @@
 <script src="{{URL::asset('public/js/nouislider.min.js')}}"></script>
 <script src="{{URL::asset('public/js/jquery.zoom.min.js')}}"></script>
 <script src="{{URL::asset('public/js/main.js')}}"></script>
-
 @yield('scripts')
 
 </body>

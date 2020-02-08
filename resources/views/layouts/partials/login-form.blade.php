@@ -1,3 +1,4 @@
+@include('layouts.partials.breadcrumb')
 <!-- SECTION -->
 <div class="section">
     <!-- container -->

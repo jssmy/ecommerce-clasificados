@@ -10,10 +10,19 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function productDetail(Product $product){
-        return view('layouts.partials.product.product-detail')->with(compact('product'));
+    public function home(Request $request){
+        if($request->ajax()){
+            return view('home.partials.content');
+        }
+        return view('home.index');
     }
+
+    public function productDetail(Product $product){
+        return view('layouts.product.product-detail')->with(compact('product'));
+    }
+
 }

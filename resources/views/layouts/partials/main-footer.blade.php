@@ -78,9 +78,6 @@
                         <li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
                         <li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
                     </ul>
-                    <span class="copyright">
-								 <a href="https://templatespoint.net" target="_blank">TemplatesPoint</a>
-							</span>
                 </div>
             </div>
             <!-- /row -->

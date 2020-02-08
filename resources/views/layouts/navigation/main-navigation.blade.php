@@ -6,7 +6,7 @@
             <!-- NAV -->
             <ul class="main-nav nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
-                @each('layouts.partials.navigation..main-navigation-item',$navigations,'option','layouts.partials.none')
+                @each('layouts.navigation..main-navigation-item',$navigations,'option','layouts.partials.none')
             </ul>
             <!-- /NAV -->
         </div>

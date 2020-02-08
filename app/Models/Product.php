@@ -8,13 +8,13 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 class Product extends  Model
 {
     protected $table='products';
     protected $guarded=['id'];
+    protected $appends=['price_with_discount','with_discount','human_date_publication'];
 
     public function scopeactive($query){
         return $query->where('active',1);
@@ -33,4 +33,16 @@ class Product extends  Model
     {
         return $this->discount > 0;
     }
+
+    public function gethumanDatePublicationAttribute()
+    {
+        return $this->date_publication->day .' de '. trans('month.'.$this->date_publication->month).'-'.$this->date_publication->year;
+    }
+
+    public function getdatePublicationAttribute()
+    {
+        return Carbon::parse($this->created_at);
+    }
+
+
 }

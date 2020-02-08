@@ -16,12 +16,11 @@ class NewProductComposer
 {
     public function compose(View $view){
         $products=collect();
+        $section_title = 'NUEVOS PRODUCTOS';
         if( ! Auth::check()){
             $products = CacheService::notAuthNewProducts();
         }
-
-
-        return $view->with('products',$products);
+        return $view->with('products',$products)->with('section_title',$section_title);
     }
 
 }

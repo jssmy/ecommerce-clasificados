@@ -17,8 +17,8 @@ class ViewServiceProvider extends ServiceProvider
     public function register()
     {
         View::composers([
-            NewProductComposer::class=>'layouts.partials.product.main-new-products',
-            NavigationComposer::class=>'layouts.partials.navigation.main-navigation'
+            NewProductComposer::class=>'layouts.product.main-new-products',
+            NavigationComposer::class=>'layouts.navigation.main-navigation'
         ]);
     }
 

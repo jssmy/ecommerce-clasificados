@@ -1,4 +1,3 @@
-
 <!-- SECTION -->
 <div class="section">
     <!-- container -->
@@ -9,33 +8,33 @@
             <div class="col-md-5 col-md-push-2">
                 <div id="product-main-img">
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_1)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_1 ?? '[[_img_url_1_]]')  }}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_2)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_2 ?? '[[_img_url_2_]]')}}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_3)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_3 ?? '[[_img_url_3_]]')}}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_7)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_7 ?? '[[_img_url_7_]]')}}" alt="">
                     </div>
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_8)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_8 ?? '[[_img_url_8_]]')}}" alt="">
                     </div>
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_4)}}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_5)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_4 ?? '[[_img_url_4_]]')}}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_6)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_5 ?? '[[_img_url_5_]]') }} " alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="{{URL::asset($product->img_url_6 ?? '[[_img_url_6_]]') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -45,33 +44,33 @@
             <div class="col-md-2  col-md-pull-5">
                 <div id="product-imgs">
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_1)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_1 ?? '[[_img_url_1_]]')}}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_2)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_2 ?? '[[_img_url_2_]]') }}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_3)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_3 ?? '[[_img_url_3_]]') }}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_7)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_7 ?? '[[_img_url_7_]]') }}" alt="">
                     </div>
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_8)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_8 ?? '[[_img_url_8_]]') }}" alt="">
                     </div>
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_4)}}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_5)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_4 ?? '[[_img_url_4_]]') }}" alt="">
                     </div>
 
                     <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_6)}}" alt="">
+                        <img src="{{URL::asset($product->img_url_5 ?? '[[_img_url_5_]]') }}" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="{{URL::asset($product->img_url_6  ?? '[[_img_url_6_]]') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -80,60 +79,29 @@
             <!-- Product details -->
             <div class="col-md-5">
                 <div class="product-details">
-                    <h2 class="product-name">{{$product->name}}</h2>
+                    <h2 class="product-name">{{$product->name ?? '[[_name_]]'}}</h2>
                     <div>
-                        <div class="product-rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <a class="review-link" href="#">10 Review(s) | Add your review</a>
+                        <a class="review-link" href="#"><i class="fa fa-eye"></i> 10 visitas recibidas</a>
                     </div>
                     <div>
-                        <h3 class="product-price">S/. {{$product->price_with_discount}} <del class="product-old-price">{{$product->price}}</del></h3>
-                        <span class="product-available">En stock</span>
+                        <h3 class="product-price">S/. {{$product->price_with_discount ?? '[[_price_with_discount_]]' }} <del class="product-old-price">{{$product->price ?? '[[_price_]]'}}</del></h3>
+                        <span class="product-available">DISPONIBLE</span>
                     </div>
-                    <p>{{$product->description}}</p>
-
-                    <div class="product-options">
-                        <label>
-                            Size
-                            <select class="input-select">
-                                <option value="0">X</option>
-                            </select>
-                        </label>
-                        <label>
-                            Color
-                            <select class="input-select">
-                                <option value="0">Red</option>
-                            </select>
-                        </label>
-                    </div>
-
-                    <div class="add-to-cart">
-                        <div class="qty-label">
-                            Qty
-                            <div class="input-number">
-                                <input type="number">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
+                    <p>{{$product->description ?? '[[_description_]]' }}</p>
+                    <div class="box">
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a data-title="Ver perfil del usuario" href="#">Joset Manihuari</a> hizo esta publicación
+                                <span class="pull-right">{{$product->date_publication ?? '[[_human_date_publication_]]'}}</span>
                             </div>
                         </div>
-                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                        <div style="padding-top:10px;" class="row">
+                            <div class="col-sm-12">
+                                <button class="btn-circule btn btn-danger btn-block"><i class="fa fa-send"></i> ECRIBIR AL VENDEDOR</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <ul class="product-btns">
-                        <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-                        <li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
-                    </ul>
-
-                    <ul class="product-links">
-                        <li>Category:</li>
-                        <li><a href="#">Headphones</a></li>
-                        <li><a href="#">Accessories</a></li>
-                    </ul>
 
                     <ul class="product-links">
                         <li>Share:</li>
@@ -402,3 +370,4 @@
     });
 
 </script>
+------

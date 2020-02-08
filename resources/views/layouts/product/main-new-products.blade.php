@@ -8,7 +8,7 @@
             <!-- section title -->
             <div class="col-md-12">
                 <div class="section-title">
-                    <h3 class="title">Productos nuevos</h3>
+                    <h3 data-section_title="{{$section_title ?? 'TITLE'}}" class="title">{{$section_title ?? 'TITLE'}}</h3>
                 </div>
             </div>
             <!-- /section title -->
@@ -20,7 +20,7 @@
                         <!-- tab -->
                         <div id="tab1" class="tab-pane active">
                             <div class="products-slick" data-nav="#slick-nav-1">
-                                @each('layouts.partials.product.main-product-item',$products,'product','partials.none')
+                                @each('layouts.product.main-product-item',$products,'product','layouts.partials.none')
                             </div>
                             <div id="slick-nav-1" class="products-slick-nav"></div>
                         </div>
