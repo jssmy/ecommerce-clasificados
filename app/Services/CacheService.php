@@ -19,7 +19,7 @@ class CacheService
     public static function notAuthNewProducts(){
         return Product::where('active',1)
             ->orderBy('priority')
-            ->take(20)
+            ->take(10)
             ->get();
          return Cache::remember('not_auth_new_proucts',now()->endOfDay(),function (){
             return Product::where('active',1)

@@ -16,7 +16,7 @@ class NewProductComposer
 {
     public function compose(View $view){
         $products=collect();
-        $section_title = 'NUEVOS PRODUCTOS';
+        $section_title = 'PRODUCTOS RECOMENDADOS';
         if( ! Auth::check()){
             $products = CacheService::notAuthNewProducts();
         }

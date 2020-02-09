@@ -11,16 +11,8 @@
         <p class="product-category">Category</p>
         <h3 class="product-name"><a href="#">{{$product->name}}</a></h3>
         <h4 class="product-price">S/. {{$product->price_with_discount}} <del class="product-old-price">S/. {{$product->price}}</del></h4>
-        <div class="product-rating">
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-        </div>
         <div class="product-btns">
             <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Mi favorito</span></button>
-            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">Agregar para comparar</span></button>
             <button data-section_title="{{$section_title ?? 'TITLE'}}" data-detail='@json($product)' data-url="{{route('product.detail',$product)}}" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Ver detalles</span></button>
         </div>
     </div>

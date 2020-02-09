@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -55,6 +55,14 @@
 <script src="{{URL::asset('public/js/nouislider.min.js')}}"></script>
 <script src="{{URL::asset('public/js/jquery.zoom.min.js')}}"></script>
 <script src="{{URL::asset('public/js/main.js')}}"></script>
+<script>
+    $(document).on('click','a',function (e) {
+        console.log($(this).attr('href'));
+        if($(this).attr('href')=='#'){
+            e.preventDefault();
+        }
+    });
+</script>
 @yield('scripts')
 
 </body>

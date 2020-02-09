@@ -29,6 +29,7 @@
                         <img src="{{URL::asset($product->img_url_4 ?? '[[_img_url_4_]]')}}" alt="">
                     </div>
 
+
                     <div class="product-preview">
                         <img src="{{URL::asset($product->img_url_5 ?? '[[_img_url_5_]]') }} " alt="">
                     </div>
@@ -79,7 +80,7 @@
             <!-- Product details -->
             <div class="col-md-5">
                 <div class="product-details">
-                    <h2 class="product-name">{{$product->name ?? '[[_name_]]'}}</h2>
+                    <h2 class="product-name"><a data-title="MI FAVORITO" href="#"><i  class="fa fa-heart-o"></i></a> {{$product->name ?? '[[_name_]]'}}</h2>
                     <div>
                         <a class="review-link" href="#"><i class="fa fa-eye"></i> 10 visitas recibidas</a>
                     </div>
@@ -104,11 +105,11 @@
                     </div>
 
                     <ul class="product-links">
-                        <li>Share:</li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                        <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+                        <li>Compartir:</li>
+                        <li data-title="Facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li data-title="Twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li data-title="Whatsapp"><a href="#"><i class="fa fa-whatsapp"></i></a></li>
+                        <li data-title="Copiar link"><a href="#"><i class="fa fa-link"></i></a></li>
                     </ul>
 
                 </div>
@@ -370,4 +371,3 @@
     });
 
 </script>
-------

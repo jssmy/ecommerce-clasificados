@@ -21,5 +21,9 @@ Route::group(['prefix'=>'auth'],function (){
     Route::get('login','AuthenticateController@login')->name('auth.login');
 });
 
+Route::group(['prefix'=>'messenger'],function (){
+    Route::get('/','MessageController@index')->name('message.index');
+});
 
 
+Route::get('/home', 'ProductController@home')->name('home');

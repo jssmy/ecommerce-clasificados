@@ -14,10 +14,14 @@ use Illuminate\Http\Request;
 class AuthenticateController extends Controller
 {
     public function login(Request $request){
-        if($request->ajax()){
+        if($request->ajax() && !auth()->check()){
             return view('layouts.partials.login-form');
+        }if($request->ajax() && auth()->check()){
+            return view('layouts.partials.login-form');
+        }else if(!auth()->check()){
+            return view('authenticate');
         }
-        return view('authenticate');
+
     }
 
 }
