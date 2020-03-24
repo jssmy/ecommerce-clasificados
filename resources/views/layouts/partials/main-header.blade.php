@@ -8,13 +8,18 @@
                 <li><a href="#"><i class="fa fa-map-marker"></i> {{config('app.addres')}}</a></li>
             </ul>
             <ul class="header-links pull-right">
-                <li><a id="btn-user-account" href="{{route('auth.login')}}"><i class="fa fa-user-o"></i>
-                        @if(Auth::check())
+                <li>
+                    @if(auth()->check())
+                        <a id="btn-user-account" href="#">
+                            <i class="fa fa-user-o"></i>
                             {{auth()->user()->name}}
-                        @else
+                        </a>
+                    @else
+                        <a id="btn-login-account" href="#" data-toggle="modal" data-target="#mdl-login-form">
+                            <i class="fa fa-user-o"></i>
                             Ingresar
-                        @endif
-                    </a>
+                        </a>
+                    @endif
                 </li>
             </ul>
         </div>
@@ -34,7 +39,7 @@
                             <!--
                             <img src="{{URL::asset('public/img/logo.png')}}" alt="">
                             -->
-                            <h1>{{config('app.name')}}.com</h1>
+                            <h1 style="color: #aeae37">{{config('app.name')}}.com</h1>
                         </a>
                     </div>-
                 </div>
@@ -65,3 +70,4 @@
     </div>
     <!-- /MAIN HEADER -->
 </header>
+@includeWhen(!auth()->check(),'layouts.partials.modal-login-form')

@@ -27,3 +27,5 @@ Route::group(['prefix'=>'messenger'],function (){
 
 
 Route::get('/home', 'ProductController@home')->name('home');
+
+Auth::routes();

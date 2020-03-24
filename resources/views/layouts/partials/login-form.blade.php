@@ -1,70 +1,111 @@
-@include('layouts.partials.breadcrumb')
-<!-- SECTION -->
-<div class="section">
-    <!-- container -->
-    <div class="container">
-        <!-- row -->
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div class="billing-details">
-                    <div class="section-title">
-                        <h3 class="title">Cuenta de usuario</h3>
-                    </div>
-                    <ul class="main-nav nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#tab-login">Iniciar sesión</a></li>
-                        <li><a data-toggle="tab" href="#tab-create-account">Nueva cuenta</a></li>
-                    </ul>
-                    <div style="min-height: 300px;" class="tab-content">
-                        <div id="tab-login" class="tab-pane fade in active">
-                            <div class="form-group">
-                                <input class="input required" type="email" name="email" placeholder="Correo electrónico">
-                            </div>
-                            <div class="form-group">
-                                <input class="input required" type="password" name="password" placeholder="Contraseña">
-                            </div>
-                        </div>
-                        <div id="tab-create-account" class="tab-pane fade">
-                            <div class="form-group">
-                                <input class="input required" type="text" name="first-name" placeholder="Nombres">
-                            </div>
-                            <div class="form-group">
-                                <input class="input required" type="text" name="last-name" placeholder="Apellidos">
-                            </div>
-                            <div class="form-group">
-                                <input class="input required" type="email" name="email" placeholder="Correo">
-                            </div>
-                            <div class="form-group">
-                                <input class="input required" type="text" name="address" placeholder="Dirección">
-                            </div>
-                            <div class="form-group">
-                                <input class="input required" type="tel" name="phone" placeholder="Teléfono / Celular">
-                            </div>
-                            <div style="padding-top:10px;" class="form-group">
-                                <button class="btn btn-block btn-success btn-circule">CREAR CUENTA</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button class="btn btn-block btn-circule bg-primary"><i class="fa fa-facebook-official"></i> Iniciar con Facebook</button>
-                            </div>
-                            <div class="col-md-6">
-                                <button class="btn btn-block btn-danger btn-circule" style="color: white"><i class="fa fa-google-plus-square"></i> Iniciar con Google</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <span>Continúa si aceptas los </span><a href="#">términos y condiciones y política de privacidad de {{config('app.name')}}</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3"></div>
+<style>
+    .title-active{
+        font-weight: bold;
+        color: black !important;
+    }
+    .billing-details .section-title a{
+        color: #0f6674;
+    }
+    .billing-details .section-active{
+        display: inline !important;
+    }
+    .billing-details .section-content{
+        display: none;
+    }
 
-        </div>
-        <!-- /row -->
+</style>
+<div class="billing-details">
+    <div style="margin: 10px; padding-bottom: 10px; font-size: 16px;" class="section-title">
+        <a id="btn-login" data-form="#form-login" class="btn-account title-active" href="#"><span class="pull-left">INICIAR SESIÓN</span></a>
+        <a id="btn-register" data-form="#form-register" class="btn-account" href="#"><span  class="pull-right">NO TENGO UNA CUENTA</span></a>
     </div>
-    <!-- /container -->
+    <div id="form-login" style="margin: 10px; padding-bottom: 10px; padding-top: 15px;" class="section-content section-active">
+        <form >
+            <div class="form-group">
+                <input class="input" type="text" name="" placeholder="Dirección email">
+            </div>
+            <div class="form-group">
+                <input class="input" type="password" name="" placeholder="Contraseña">
+            </div>
+            <div class="form-group">
+                <button style="background-color: #aeae37; color: white" class="btn btn-block btn-circule">INICIAR SESIÓN</button>
+            </div>
+        </form>
+    </div>
+    <div id="form-register" style="margin: 10px; padding-bottom: 10px; padding-top: 15px;" class="section-content ">
+        <form method="POST" action="{{ route('register') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <input class="input @error('name') is-invalid @enderror" type="text" value="{{ old('name') }}" name="name"  placeholder="Nombres y apellidos">
+                @error('name')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <input class="input @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" placeholder="Dirección email">
+                @error('email')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <input class="input @error('password') is-invalid @enderror" type="password" name="password" placeholder="Contraseña">
+                @error('password')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <input class="input" type="password" name="password_confirmation" placeholder="Confirmar contraseña">
+                @error('password')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <button style="background-color: #aeae37; color: white" class="btn btn-block btn-circule">CREAR CUENTA</button>
+            </div>
+        </form>
+    </div>
+    <div class="section-footer">
+        <!---
+        <span style="margin: 5px; font-size: 13">Otras opciones</span>
+        <div style="margin: 5px;" class="row">
+            <button class="btn btn-block btn-circule bg-primary"><i class="fa fa-facebook-official"></i> Iniciar con Facebook</button>
+        </div>
+        <div style="margin: 5px; padding-top: 10px;" class="row">
+            <button class="btn btn-block btn-danger btn-circule" style="color: white"><i class="fa fa-google-plus-square"></i> Iniciar con Google</button>
+        </div>
+        -->
+        <div style="margin: 5px; font-size: 13px; padding-top: 10px;" class="row">
+            <span>Continúa si aceptas los </span><a href="#">términos y condiciones y política de privacidad de {{config('app.name')}}</a>
+        </div>
+    </div>
 </div>
-<!-- /SECTION -->
+<script>
+    $(".btn-account").click(function () {
+        if(!$(this).hasClass('title-active')){
+            $('.title-active').removeClass('title-active');
+            $(this).addClass('title-active');
+            $(".section-active").removeClass('section-active');
+            $($(this).data('form')).addClass('section-active');
+        }
+        localStorage.setItem('modal_loaded',$(this).attr('id'));
+    });
+</script>
+
+@if(Session::has('errors'))
+    <script>
+        $(document).ready(function () {
+            if(localStorage.getItem('modal_loaded')){
+                $("#"+localStorage.getItem('modal_loaded')).trigger('click');
+                $("#btn-login-account").trigger('click');
+            }
+        });
+    </script>
+@endif
