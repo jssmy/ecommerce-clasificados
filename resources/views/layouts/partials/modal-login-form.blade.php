@@ -13,9 +13,9 @@
                 <h1 class="text-center" style="color: #aeae37">{{config('app.name')}}</h1>
             </div>
             <div class="modal-body">
-                <form class="px-sm-4 py-sm-4">
+                <div class="px-sm-4 py-sm-4">
                     @include('layouts.partials.login-form')
-                </form>-
+                </div>
             </div>
 
         </div>

@@ -1,21 +1,5 @@
 <div class="header-ctn">
     <!-- Wishlist -->
-    <div>
-        <a href="#">
-            <i class="fa fa-comment"></i>
-            <span>Mensajes</span>
-            <div class="qty">2</div>
-        </a>
-    </div>
-
-    <div>
-        <a href="#">
-            <i class="fa fa-heart"></i>
-            <span>Mis Favoritos</span>
-            <div class="qty">2</div>
-        </a>
-    </div>
-
     <!-- /Wishlist -->
 
     <!-- Cart -->

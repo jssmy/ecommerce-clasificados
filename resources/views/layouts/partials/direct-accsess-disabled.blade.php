@@ -5,19 +5,6 @@
 </style>
 <div class="header-ctn">
     <!-- Wishlist -->
-    <div>
-        <a href="#">
-            <i class="fa fa-comment"></i>
-            <span>Mensajes</span>
-        </a>
-    </div>
-
-    <div>
-        <a href="#">
-            <i class="fa fa-heart"></i>
-            <span>Mis Favoritos</span></a>
-    </div>
-
     <!-- /Wishlist -->
 
     <!-- Cart -->

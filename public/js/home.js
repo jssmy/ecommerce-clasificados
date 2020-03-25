@@ -41,6 +41,7 @@ $(document).ready(function () {
         });
         return html;
     }
+    /*
     $("#btn-user-account").click(function (e) {
         e.preventDefault();
         setBackPage();
@@ -58,6 +59,7 @@ $(document).ready(function () {
 
         return false;
     });
+    */
 
     $(document).on('click','.back_breadcrumb',function () {
         $("#content").html(localStorage.getItem('back_page'));

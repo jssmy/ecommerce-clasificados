@@ -20,12 +20,23 @@
         <a id="btn-register" data-form="#form-register" class="btn-account" href="#"><span  class="pull-right">NO TENGO UNA CUENTA</span></a>
     </div>
     <div id="form-login" style="margin: 10px; padding-bottom: 10px; padding-top: 15px;" class="section-content section-active">
-        <form >
+        <form method="post" action="{{ route('login') }}" >
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">
-                <input class="input" type="text" name="" placeholder="Dirección email">
+                <input class="input @error('email') is-invalid @enderror"  value="{{ old('email') }}" type="email" name="email" placeholder="Dirección email">
+                @error('email')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
             </div>
             <div class="form-group">
-                <input class="input" type="password" name="" placeholder="Contraseña">
+                <input class="input @error('password') is-invalid @enderror" type="password" value="{{ old('password') }}" name="password" placeholder="Contraseña">
+                @error('password')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
             </div>
             <div class="form-group">
                 <button style="background-color: #aeae37; color: white" class="btn btn-block btn-circule">INICIAR SESIÓN</button>
@@ -102,10 +113,13 @@
 @if(Session::has('errors'))
     <script>
         $(document).ready(function () {
-            if(localStorage.getItem('modal_loaded')){
-                $("#"+localStorage.getItem('modal_loaded')).trigger('click');
-                $("#btn-login-account").trigger('click');
+            function modalCheck(){
+                if(localStorage.getItem('modal_loaded')){
+                    $("#"+localStorage.getItem('modal_loaded')).trigger('click');
+                    $("#btn-login-account").trigger('click');
+                }
             }
+            modalCheck();
         });
     </script>
 @endif

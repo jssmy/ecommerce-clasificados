@@ -10,15 +10,36 @@
             <ul class="header-links pull-right">
                 <li>
                     @if(auth()->check())
-                        <a id="btn-user-account" href="#">
-                            <i class="fa fa-user-o"></i>
-                            {{auth()->user()->name}}
-                        </a>
+                        <div class="dropdown">
+                            <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-user-o"></i>
+                                {{auth()->user()->name}}
+                            </a>
+                            <div class="cart-dropdown">
+                                <div class="cart-summary">
+                                    <h5>{{auth()->user()->email}}</h5>
+                                    <small>Último inicio de sesión: {{auth()->user()->created_at}}</small>
+                                </div>
+                                <div class="cart-btns">
+                                    <a style="width: 100% !important;" class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        CERRAR SESIÓN
+                                        <i class="fa fa-sign-out fa-1x" aria-hidden="true"></i>
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     @else
                         <a id="btn-login-account" href="#" data-toggle="modal" data-target="#mdl-login-form">
                             <i class="fa fa-user-o"></i>
                             Ingresar
                         </a>
+
                     @endif
                 </li>
             </ul>
