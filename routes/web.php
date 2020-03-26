@@ -11,6 +11,12 @@
 |
 */
 
+Route::group(['middleware'=>['auth']],function (){
+    Route::group(['prefix'=>'cart'], function (){
+        Route::put('prodcut-add/{product}','CartController@addToCart')->name('cart.add-cart');
+        Route::get('detail-cart','CartController@detailCart')->name('cart.detail-items');
+    });
+} );
 Route::get('/','ProductController@home')->name('home');
 
 Route::group(['prefix'=>'product'],function (){
@@ -25,7 +31,5 @@ Route::group(['prefix'=>'messenger'],function (){
     Route::get('/','MessageController@index')->name('message.index');
 });
 
-
-Route::get('/home', 'ProductController@home')->name('home');
 
 Auth::routes();

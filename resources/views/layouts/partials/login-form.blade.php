@@ -116,10 +116,11 @@
             function modalCheck(){
                 if(localStorage.getItem('modal_loaded')){
                     $("#"+localStorage.getItem('modal_loaded')).trigger('click');
-                    $("#btn-login-account").trigger('click');
                 }
+                $("#btn-login-account").trigger('click');
             }
-            modalCheck();
+            setTimeout(modalCheck(),2);
+
         });
     </script>
 @endif

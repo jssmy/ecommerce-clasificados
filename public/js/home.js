@@ -1,11 +1,12 @@
 $(document).ready(function () {
+    /*
     $(document).on('click','.quick-view',function () {
         var data = $(this).data('detail')
         setBackPage();
         $("#content").html(view_detail(data));
         createBreadCrumb(data.name);
     });
-
+    */
     function setBackPage() {
         localStorage.setItem('back_page',$("#content").html());
     }
@@ -64,7 +65,7 @@ $(document).ready(function () {
     $(document).on('click','.back_breadcrumb',function () {
         $("#content").html(localStorage.getItem('back_page'));
     });
-
+    /*
     $('.header-logo').click(function (e) {
         e.preventDefault();
         var btn = $(this);
@@ -76,4 +77,5 @@ $(document).ready(function () {
             }
         });
     });
+    */
 });

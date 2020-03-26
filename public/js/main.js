@@ -137,3 +137,34 @@
 	}
 
 })(jQuery);
+
+$(document).ready(function () {
+    $(".add-to-cart-btn").click(function () {
+        var url = $(this).data('url');
+        var btn = $(this);
+        $.ajax({
+            url : url,
+            method: 'put',
+            data: { quantity : 1 },
+            success: function (view) {
+                $(".cart-list-item").html(view);
+            }, beforeSend: function () {
+                btn.html('<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i> AGREGANDO');
+            }, complete: function () {
+                btn.html('<i class="fa fa-shopping-cart"></i> AGREGAR');
+            }, error: function (e) {
+                console.log(e);
+                if(e.status == 401){
+                    $("#btn-login-account").click();
+                }
+            }
+        });
+
+        function updateCart() {
+            $.get(url_updat_lista_cart, function (view) {
+                $(".cart-list-item").html(view);
+            });
+        }
+    });
+
+});

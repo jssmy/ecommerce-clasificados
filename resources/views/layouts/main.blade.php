@@ -245,6 +245,21 @@
         jQuery.validator.addMethod("decimal", function (value, element) {
             return this.optional(element) || /^\d*[.]?\d{0,2}$/.test(value);
         }, "Por favor, ingresar un número valido hasta 2 decimales (9.99).");
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
     });
 </script>
 <script src="{{URL::asset('public/js/lunar.js')}}"></script>

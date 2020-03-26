@@ -13,10 +13,10 @@
         <h4 class="product-price">S/. {{$product->price_with_discount}} <del class="product-old-price">S/. {{$product->price}}</del></h4>
         <div class="product-btns">
             <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Mi favorito</span></button>
-            <button data-section_title="{{$section_title ?? 'TITLE'}}" data-detail='@json($product)' data-url="{{route('product.detail',$product)}}" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Ver detalles</span></button>
+            <a href="{{route('product.detail',$product)}}" data-section_title="{{$section_title ?? 'TITLE'}}" data-detail='@json($product)' data-url="{{route('product.detail',$product)}}" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Ver detalles</span></a>
         </div>
     </div>
     <div class="add-to-cart">
-        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Agregar</button>
+        <button data-url="{{ isset($product) ? route('cart.add-cart',$product) : '#' }}" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Agregar</button>
     </div>
 </div>

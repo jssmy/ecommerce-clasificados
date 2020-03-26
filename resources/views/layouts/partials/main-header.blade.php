@@ -39,7 +39,6 @@
                             <i class="fa fa-user-o"></i>
                             Ingresar
                         </a>
-
                     @endif
                 </li>
             </ul>
@@ -55,8 +54,8 @@
             <div class="row">
                 <!-- LOGO -->
                 <div class="col-md-3">
-                    <div data-url="{{route('home')}}" class="header-logo">
-                        <a href="#" class="logo">
+                    <div class="header-logo">
+                        <a href="{{route('home')}}" class="logo">
                             <!--
                             <img src="{{URL::asset('public/img/logo.png')}}" alt="">
                             -->
@@ -78,10 +77,9 @@
                 <!-- /SEARCH BAR -->
 
                 <!-- ACCOUNT -->
-                <div class="col-md-4 clearfix">
-                    @includeWhen(auth()->check(),'layouts.partials.direct-access')
-                    @includeWhen(!auth()->check(),'layouts.partials.direct-accsess-disabled')
-
+                <div class="cart-list-item col-md-4 clearfix">
+                    @includeWhen(auth()->check() ,'layouts.cart.direct-access')
+                    @includeWhen(!auth()->check() ,'layouts.cart.direct-accsess-disabled')
                 </div>
                 <!-- /ACCOUNT -->
             </div>

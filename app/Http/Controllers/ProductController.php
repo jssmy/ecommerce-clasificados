@@ -21,8 +21,11 @@ class ProductController extends Controller
         return view('home.index');
     }
 
-    public function productDetail(Product $product){
-        return view('layouts.product.product-detail')->with(compact('product'));
+    public function productDetail(Request $request , Product $product){
+        if($request->ajax()){
+            return view('layouts.product.product-detail')->with(compact('product'));
+        }
+        return view('layouts.product.main-product-detail')->with(compact('product'));
     }
 
 }
