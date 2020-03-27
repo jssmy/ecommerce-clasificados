@@ -19,7 +19,7 @@ Route::group(['middleware'=>['auth']],function (){
     });
 });
 
-Route::get('/','ProductController@home')->name('home');
+Route::get('/','HomeController@index')->name('home');
 
 Route::group(['prefix'=>'product'],function (){
     Route::get('detail/{product}','ProductController@productDetail')->name('product.detail');
