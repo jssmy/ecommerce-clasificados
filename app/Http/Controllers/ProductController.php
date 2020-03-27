@@ -14,12 +14,6 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function home(Request $request){
-        if($request->ajax()){
-            return view('home.partials.content');
-        }
-        return view('home.index');
-    }
 
     public function productDetail(Request $request , Product $product){
         if($request->ajax()){

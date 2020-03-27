@@ -68,9 +68,9 @@
                 <!-- SEARCH BAR -->
                 <div class="col-md-5">
                     <div class="header-search">
-                        <form>
-                            <input name="key" class="input" placeholder="Escribe aquí">
-                            <button class="search-btn"><i class="fa fa-search"></i> Buscar</button>
+                        <form action="{{route('home')}}" method="get">
+                            <input name="buscar" value="{{request()->buscar}}" class="input" placeholder="Escribe aquí">
+                            <button type="submit" class="search-btn"><i class="fa fa-search"></i> Buscar</button>
                         </form>
                     </div>
                 </div>

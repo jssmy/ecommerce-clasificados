@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Product;
 class HomeController extends Controller
 {
     /**
@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -21,8 +21,24 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('home');
+    public function index(Request $request){
+
+        if($request->ajax()){
+            return view('home.partials.content');
+        }
+        if($request->has('buscar')){
+            $products = new Product();
+
+            $keys = explode(' ',$request->buscar);
+            foreach ($keys as $key){
+                $products = $products->orwhere(function ($q) use ($key){
+                    return $q->where('description','like',"%$key%");
+                });
+            }
+
+            $products = $products->paginate(12);
+            return view('home.search',compact('products'));
+        }
+        return view('home.index');
     }
 }
