@@ -159,12 +159,29 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+    function updateCart() {
+        $.get(url_updat_lista_cart, function (view) {
+            $(".cart-list-item").html(view);
+        });
+    }
 
-        function updateCart() {
-            $.get(url_updat_lista_cart, function (view) {
+    function deleteCart(btn){
+        var url = $(btn).data('url');
+        $.ajax({
+            url : url,
+            method: 'put',
+            success: function (view) {
                 $(".cart-list-item").html(view);
-            });
-        }
+            }
+        });
+    }
+    $(document).on('click','.delete',function () {
+        deleteCart($(this));
+    });
+
+    $('.delete').click(function () {
+        deleteCart($(this));
     });
 
 });

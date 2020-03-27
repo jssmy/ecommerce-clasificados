@@ -40,4 +40,10 @@ class CartController extends Controller
     public function detailCart(){
         return view('layouts.cart.direct-access');
     }
+
+    public function deleteFromCart(CartItem $item){
+        $item->active=0;
+        $item->save();
+        return view('layouts.cart.direct-access');
+    }
 }

@@ -20,11 +20,10 @@
                             <h3 class="product-name"><a href="#">{{$item->name}}</a></h3>
                             <h4 class="product-price"><span class="qty">{{$item->quatity}} x</span>{{$item->quatity*$item->product->price_with_discount}}</h4>
                         </div>
-                        <button class="delete"><i class="fa fa-close"></i></button>
+                        <button data-url="{{route('delete-from-cart',$item)}}" class="delete"><i class="fa fa-close"></i></button>
                     </div>
                     @empty
                         Aún no agregó productos :)
-
                     @endforelse
                 </div>
                 <div class="cart-summary">
