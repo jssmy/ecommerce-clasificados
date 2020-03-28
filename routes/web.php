@@ -17,9 +17,11 @@ Route::group(['middleware'=>['auth']],function (){
         Route::get('detail-cart','CartController@detailCart')->name('cart.detail-items');
         Route::put('delete-from-cart/{item}','CartController@deleteFromCart')->name('delete-from-cart');
     });
+
+    Route::get('bot','BotController@processRequest')->name('bot.request');
 });
 
-Route::get('/','ProductController@home')->name('home');
+Route::get('/','HomeController@index')->name('home');
 
 Route::group(['prefix'=>'product'],function (){
     Route::get('detail/{product}','ProductController@productDetail')->name('product.detail');
