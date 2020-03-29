@@ -95,6 +95,8 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         margin-left: 20px;
         float: left;
         width: 70%;
+        display: flex;
+        flex-direction: column;
     }
 
     .chat-list .out .chat-img {
@@ -278,6 +280,11 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         display: flex;
         justify-content: flex-end;
     }
+    .chat-message-info{
+        font-size: 11px;
+        display: flex;
+        text-align: right;
+    }
 
 
 </style>
@@ -287,6 +294,18 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 --->
 <script id="template-out" type="text/template">
     <li class="out">
+        <div class="chat-body">
+            <div class="chat-message">
+                <p>_content_</p>
+            </div>
+        </div>
+    </li>
+</script>
+<script id="template-in" type="text/template">
+    <li class="in">
+        <div class="chat-img">
+            <img alt="Avtar" src="{{$url_img}}">
+        </div>
         <div class="chat-body">
             <div class="chat-message">
                 <p>_content_</p>
@@ -318,6 +337,10 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                     <div class="chat-body">
                         <div class="chat-message">
                             <p>!Hola! Soy {{config('app.bot')}}, estoy para ayudarte 😊</p>
+                            <div class="chat-message-info">12.3
+                                <div class="bm-webchat-sent-tilde-on bm-webchat-sent-tilde-left">&nbsp;</div>
+                                <div class="bm-webchat-sent-tilde-on bm-webchat-sent-tilde-left">&nbsp;</div>
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -368,16 +391,32 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 <script>
 
     $(document).ready(function () {
+        var valMessage = 'hola';
         var sendMessage = new Audio("{{URL::asset('/public/notification/button-confirmation.wav')}}");
         var newMessage = new Audio("{{URL::asset('/public/notification/button-notification.wav')}}");
         function scrollTop(){
-            $('.card-body').animate({scrollTop : $('.card-body').offset().top});
+            $('.card-body').animate({scrollTop : ($('.in').length*$('.in').height())+ ($('.out').length*$('.out').height())+($('.in').height()+$('.out').height())*5});
         }
         var writing = function (){
             $('.chat-user-info').find('div').html('<i class="fa fa-circle" aria-hidden="true"></i> escribiendo...');
+            $.ajax({
+                type: 'post',
+                url : "{{route('bot.request')}}",
+                data: {requestText : valMessage},
+                success: function (response) {
+                    var recivedMessage = $("#template-in").html().replace('_content_',response.responseText);
+                    $('.chat-list').append(recivedMessage);
+                    newMessage.play();
+
+                }, complete(){
+                    stopWriting();
+                    scrollTop();
+                }
+            });
         }
-        function stopWritin(){
+        function stopWriting(){
             $('.chat-user-info').find('div').html('<i style="font-style: italic" class="fa fa-circle" aria-hidden="true"></i> en línea');
+
         }
         $('.input-send').keyup(function (e) {
             if(e.keyCode === 13 && $(this).val()){
@@ -385,7 +424,8 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                     sendMessage.pause();
                 }
                 sendMessage.play();
-                var message = $("#template-out").html().replace('_content_',$(this).val());
+                valMessage =$(this).val();
+                var message = $("#template-out").html().replace('_content_',valMessage);
                 $('.chat-list').append(message);
                 $(this).val('');
                 scrollTop();
@@ -394,12 +434,12 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         });
 
         $('.btn-expand').click(function () {
-            scrollTop();
+
             if($('.card').hasClass('card-expanded')){
                 $(".card").removeClass('card-expanded');
                 return true;
             }
-
+            scrollTop();
             $('.card').addClass('card-expanded');
         });
         $(".card-option-move-left").click(function (e) {
