@@ -18,8 +18,8 @@ Route::group(['middleware'=>['auth']],function (){
         Route::put('delete-from-cart/{item}','CartController@deleteFromCart')->name('delete-from-cart');
     });
 
-    Route::get('bot','BotController@processRequest')->name('bot.request');
 });
+Route::post ('bot','BotController@processResponse')->name('bot.request');
 
 Route::get('/','HomeController@index')->name('home');
 
