@@ -49,7 +49,6 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         margin-bottom: 10px;
         display: flex;
         align-items: center;
-        /*overflow: auto;*/
     }
 
     .chat-list .chat-img {
@@ -69,26 +68,21 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         overflow-wrap: break-word;
         background: #f1f0f0;
         display: inline-block;
-        padding: 10px 20px;
+        padding: 10px 20px 0px 20px;
         position: relative;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     }
-
-
-
     .chat-list .chat-message h5 {
         margin: 0 0 5px 0;
         font-weight: 600;
         line-height: 100%;
 
     }
-
     .chat-list .chat-message p {
         line-height: 18px;
         margin: 0;
         padding: 0;
         text-align: justify;
-
     }
 
     .chat-list .chat-body {
@@ -108,7 +102,9 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         margin-right: 20px;
         display: flex;
     }
-
+    .in , out{
+        justify-content: center;
+    }
     .chat-list .in .chat-message {
         border-radius: 10px;
         border-bottom-left-radius: 0px;
@@ -194,7 +190,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
     }
     .card-option{
         height: 160px;
-        width: 80%;
+        width: 100%;
         display: flex;
         padding: 0px;
     }
@@ -227,7 +223,6 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         justify-content: center;
         font-size: 15px;
         font-weight: bold;
-        background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcREHxbijhe1ZwCHRlybXeQZbIbILW0mm8hrkmkE8yuhWgZxgUMl");
     }
     .card-option-item-header i{
         font-size: 43px;
@@ -260,8 +255,8 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
     .card-option-conent{
         display: flex;
         overflow: auto;
-        white-space: nowrap;
         overflow-x: hidden;
+        padding-bottom: 8px;
     }
     .card-option-move-left,
     .card-option-move-right,
@@ -281,9 +276,11 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         justify-content: flex-end;
     }
     .chat-message-info{
-        font-size: 11px;
+        font-size: 10px;
         display: flex;
         text-align: right;
+        justify-content: flex-end;
+        color: rgba(0, 0, 0, .45);;
     }
 
 
@@ -297,6 +294,9 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         <div class="chat-body">
             <div class="chat-message">
                 <p>_content_</p>
+                <div class="chat-message-info">
+                    @include('layouts.messenger.check',['time'=>'_time_'])
+                </div>
             </div>
         </div>
     </li>
@@ -309,6 +309,9 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         <div class="chat-body">
             <div class="chat-message">
                 <p>_content_</p>
+                <div class="chat-message-info">
+                    _time_
+                </div>
             </div>
         </div>
     </li>
@@ -337,47 +340,9 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                     <div class="chat-body">
                         <div class="chat-message">
                             <p>!Hola! Soy {{config('app.bot')}}, estoy para ayudarte 😊</p>
-                            <div class="chat-message-info">12.3
-                                <div class="bm-webchat-sent-tilde-on bm-webchat-sent-tilde-left">&nbsp;</div>
-                                <div class="bm-webchat-sent-tilde-on bm-webchat-sent-tilde-left">&nbsp;</div>
-                            </div>
+                            <div class="chat-message-info">{{now()->format('h:m a')}}</div>
                         </div>
                     </div>
-                </li>
-                <li class="in">
-                    <button class="btn card-option-move-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-                    <div class="card-option-conent">
-                        <div class="card-option">
-                            <div class="card-option-item">
-                                <div class="card-option-item-header">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                </div>
-                                <div class="card-option-item-content">HORARIOS DE ATENCIÓN</div>
-                                <div class="card-option-item-footer">
-                                    <button class="btn">👉 Consultar</button>
-                                </div>
-                            </div>
-                            <div class="card-option-item">
-                                <div class="card-option-item-header">
-                                    <i class="fa fa-opencart"></i>
-                                </div>
-                                <div class="card-option-item-content">
-                                    PRODUCTOS Y PROMOCIONES
-                                </div>
-                                <div class="card-option-item-footer"><button class="btn">👉 Consultar</button></div>
-                            </div>
-                            <div class="card-option-item">
-                                <div class="card-option-item-header">
-                                    <i class="fa fa-opencart"></i>
-                                </div>
-                                <div class="card-option-item-content">
-                                    PRODUCTOS Y PROMOCIONES
-                                </div>
-                                <div class="card-option-item-footer"><button class="btn">👉 Consultar</button></div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn card-option-move-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
                 </li>
             </ul>
         </div>
@@ -394,8 +359,16 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         var valMessage = 'hola';
         var sendMessage = new Audio("{{URL::asset('/public/notification/button-confirmation.wav')}}");
         var newMessage = new Audio("{{URL::asset('/public/notification/button-notification.wav')}}");
+        var defaultCardOption = "{{route('bot.default-card')}}";
         function scrollTop(){
-            $('.card-body').animate({scrollTop : ($('.in').length*$('.in').height())+ ($('.out').length*$('.out').height())+($('.in').height()+$('.out').height())*5});
+            $('.card-body').animate({scrollTop : ($('.in').length*$('.in').height())+ ($('.out').length*$('.out').height())+($('.in').height()+$('.out').height())*10});
+        }
+        function loadDefaultCard(card){
+            if($('.card-option-conent').length && !card) return;
+            $.get(defaultCardOption+'?card='+card,function (view) {
+                $('.chat-list').append(view);
+                scrollTop();
+            });
         }
         var writing = function (){
             $('.chat-user-info').find('div').html('<i class="fa fa-circle" aria-hidden="true"></i> escribiendo...');
@@ -404,7 +377,15 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 url : "{{route('bot.request')}}",
                 data: {requestText : valMessage},
                 success: function (response) {
-                    var recivedMessage = $("#template-in").html().replace('_content_',response.responseText);
+                    console.log('evalundo: ', response.loadSuggest,response.loadSuggest!=false,response.loadSuggest ? true : false);
+                    if(response.loadSuggest!=false){
+                        console.log('adentro');
+                        loadDefaultCard(response.loadSuggest);
+                    }
+                    var recivedMessage = $("#template-in")
+                                            .html()
+                                            .replace('_content_',response.responseText)
+                                            .replace('_time_',formatedTime);
                     $('.chat-list').append(recivedMessage);
                     newMessage.play();
 
@@ -414,8 +395,11 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 }
             });
         }
+        var formatedTime= function () {
+            return (new Date()).toLocaleString('en-US',{hour: 'numeric',minute:'numeric',hour12: true});
+        }
         function stopWriting(){
-            $('.chat-user-info').find('div').html('<i style="font-style: italic" class="fa fa-circle" aria-hidden="true"></i> en línea');
+            $('.chat-user-info').find('div').html('<i class="fa fa-circle" aria-hidden="true"></i> en línea');
 
         }
         $('.input-send').keyup(function (e) {
@@ -425,7 +409,9 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 }
                 sendMessage.play();
                 valMessage =$(this).val();
-                var message = $("#template-out").html().replace('_content_',valMessage);
+                var message = $("#template-out")
+                                .html()
+                                .replace('_content_',valMessage).replace('_time_',formatedTime);
                 $('.chat-list').append(message);
                 $(this).val('');
                 scrollTop();
@@ -433,23 +419,25 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
             }
         });
 
+
         $('.btn-expand').click(function () {
 
             if($('.card').hasClass('card-expanded')){
                 $(".card").removeClass('card-expanded');
+                scrollTop();
+                loadDefaultCard(false);
                 return true;
             }
-            scrollTop();
             $('.card').addClass('card-expanded');
         });
-        $(".card-option-move-left").click(function (e) {
+        $(document).on('click',".card-option-move-left",function (e) {
             e.preventDefault();
             if($(this).next().scrollLeft()<=0){
                 return true
             }
             $(this).next().animate({scrollLeft: '-=220px'});
         });
-        $(".card-option-move-right").click(function (e) {
+        $(document).on('click',".card-option-move-right",function (e) {
             e.preventDefault();
             if($(this).prev().scrollLeft()+220 >= $(this).prev().children().children().length * $(this).prev().children().width()){
                 return true;

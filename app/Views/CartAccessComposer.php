@@ -18,6 +18,7 @@ class CartAccessComposer
             ->with('product')
             ->active()
             ->get();
+        
         return $view->with('items',$items);
     }
 }

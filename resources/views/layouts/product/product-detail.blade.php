@@ -7,36 +7,46 @@
             <!-- Product main img -->
             <div class="col-md-5 col-md-push-2">
                 <div id="product-main-img">
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_1 ?? '[[_img_url_1_]]')  }}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_2 ?? '[[_img_url_2_]]')}}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_3 ?? '[[_img_url_3_]]')}}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_7 ?? '[[_img_url_7_]]')}}" alt="">
-                    </div>
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_8 ?? '[[_img_url_8_]]')}}" alt="">
-                    </div>
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_4 ?? '[[_img_url_4_]]')}}" alt="">
-                    </div>
-
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_5 ?? '[[_img_url_5_]]') }} " alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_6 ?? '[[_img_url_6_]]') }}" alt="">
-                    </div>
+                    @if($product->img_url_1)
+                        <div class="product-preview">
+                            <img src="{{ URL::asset($product->img_url_1) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_2)
+                        <div class="product-preview">
+                            <img src="{{ URL::asset($product->img_url_2) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_3)
+                        <div class="product-preview">
+                            <img src="{{ URL::asset($product->img_url_3) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_7)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_7)}}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_8)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_8)}}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_4)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_4)}}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_5)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_5) }} " alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_6)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_6) }}" alt="">
+                        </div>
+                    @endif
                 </div>
             </div>
             <!-- /Product main img -->
@@ -44,35 +54,46 @@
             <!-- Product thumb imgs -->
             <div class="col-md-2  col-md-pull-5">
                 <div id="product-imgs">
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_1 ?? '[[_img_url_1_]]')}}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_2 ?? '[[_img_url_2_]]') }}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_3 ?? '[[_img_url_3_]]') }}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_7 ?? '[[_img_url_7_]]') }}" alt="">
-                    </div>
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_8 ?? '[[_img_url_8_]]') }}" alt="">
-                    </div>
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_4 ?? '[[_img_url_4_]]') }}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_5 ?? '[[_img_url_5_]]') }}" alt="">
-                    </div>
-
-                    <div class="product-preview">
-                        <img src="{{URL::asset($product->img_url_6  ?? '[[_img_url_6_]]') }}" alt="">
-                    </div>
+                    @if($product->img_url_1)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_1)}}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_2)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_2) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_3)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_3) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_7)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_7) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_8)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_8) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_4)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_4) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_5)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_5) }}" alt="">
+                        </div>
+                    @endif
+                    @if($product->img_url_6)
+                        <div class="product-preview">
+                            <img src="{{URL::asset($product->img_url_6) }}" alt="">
+                        </div>
+                    @endif
                 </div>
             </div>
             <!-- /Product thumb imgs -->

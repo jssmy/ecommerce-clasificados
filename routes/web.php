@@ -11,29 +11,37 @@
 |
 */
 
-Route::group(['middleware'=>['auth']],function (){
+Route::group(['middleware'=>'auth'],function (){
     Route::group(['prefix'=>'cart'], function (){
-        Route::put('product-add/{product}','CartController@addToCart')->name('cart.add-cart');
+
+        Route::put('product-add/{product}','CartController@addToCart')
+            ->middleware('product.interaction')
+            ->name('cart.add-cart');
+
         Route::get('detail-cart','CartController@detailCart')->name('cart.detail-items');
+
         Route::put('delete-from-cart/{item}','CartController@deleteFromCart')->name('delete-from-cart');
     });
-
-});
-Route::post ('bot','BotController@processResponse')->name('bot.request');
-
-Route::get('/','HomeController@index')->name('home');
-
-Route::group(['prefix'=>'product'],function (){
-    Route::get('detail/{product}','ProductController@productDetail')->name('product.detail');
-});
-
-Route::group(['prefix'=>'auth'],function (){
-    Route::get('login','AuthenticateController@login')->name('auth.login');
 });
 
 Route::group(['prefix'=>'messenger'],function (){
-    Route::get('/','MessageController@index')->name('message.index');
+    Route::post('bot','BotController@processResponse')->name('bot.request');
+    Route::get('defaut-card-option','BotController@loadDeaultCard')->name('bot.default-card');
+    Route::post('process-bot','BotController@processRequest')->name('bot.webhook');
 });
 
+Route::get('/','HomeController@index')->name('home')->middleware('searching');
+
+Route::group(['prefix'=>'product'],function (){
+    Route::get('detail/{product}','ProductController@productDetail')
+            ->middleware('product.interaction')
+            ->name('product.detail');
+});
+
+Route::group(['prefix'=>'auth-user'],function (){
+    Route::get('login','AuthenticateController@login')->name('auth.login');
+});
 
 Auth::routes();
+
+Route::get('test','HomeController@test');

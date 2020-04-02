@@ -58,7 +58,6 @@
     @yield('content')
 </div>
 @include('layouts.messenger.float-button')
-
 @include('layouts.partials.main-footer')
 <!-- /FOOTER -->
 

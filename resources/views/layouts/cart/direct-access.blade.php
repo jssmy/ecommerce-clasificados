@@ -14,7 +14,7 @@
                     @forelse($items as $item)
                     <div class="product-widget">
                         <div class="product-img">
-                            <img src="{{URL::asset($item->product->img_url_1)}}" alt="">
+                            <img src="{{$item->product->img_url_1}}" alt="">
                         </div>
                         <div class="product-body">
                             <h3 class="product-name"><a href="#">{{$item->name}}</a></h3>
