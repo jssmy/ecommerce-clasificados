@@ -17,13 +17,16 @@ class NewProductComposer
     public function compose(View $view){
         $products=collect();
         $section_title = 'PRODUCTOS RECOMENDADOS';
-        $products = CacheService::notAuthNewProducts();
-        /*
+
+
         if( ! Auth::check()){
             $products = CacheService::notAuthNewProducts();
+            return $view->with('products',$products)->with('section_title',$section_title);
         }
-        */
+        $products = CacheService::authNewProducts();
+
         return $view->with('products',$products)->with('section_title',$section_title);
+
     }
 
 }

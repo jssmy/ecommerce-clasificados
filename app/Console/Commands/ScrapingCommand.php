@@ -1,62 +1,72 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
-use Illuminate\Http\Request;
+use Illuminate\Console\Command;
 use App\Models\Product;
-class HomeController extends Controller
+class ScrapingCommand extends Command
 {
     /**
-     * Create a new controller instance.
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'scraping:linio';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Create a new command instance.
      *
      * @return void
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        parent::__construct();
     }
 
     /**
-     * Show the application dashboard.
+     * Execute the console command.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return mixed
      */
-    public function index(Request $request){
+    public function handle()
+    {
+        //
+        $enabled=true;
+        for($i=0; $i<100; $i++){
+            dump($i);
+            $sitioweb = $this->curl("https://www.olx.com.pe/api/relevance/search?category=832&facet_limit=100&location=1000001&location_facet_limit=20&page=$i&user=17133e8fb77x5679657b");
+            $response  = json_decode($sitioweb);
 
-        if($request->ajax()){
-            return view('home.partials.content');
-        }
-        if($request->buscar){
-            $products = Product::where('description','like',"%$request->buscar%")->paginate(12);
-            session()->put('results',$products->total());
-            return view('home.search',compact('products'));
-        }
-        return view('home.index');
-    }
+            if(!isset($response->data)) return;
 
-    public function test(){
+            $products = $response->data;
 
-        $sitioweb = $this->curl('https://www.olx.com.pe/api/relevance/search?category=832&facet_limit=100&location=1000001&location_facet_limit=20&page=4&user=17133e8fb77x5679657b');  // Ejecuta la función curl escrapeando el sitio web https://devcode.la and regresa el valor a la variable $sitioweb
-        $response  = json_decode($sitioweb);
-        $products = $response->data;
-
-        foreach ($products as $product) {
-            $item = [
-                'name' => $product->title,
-                'description' => $product->description,
-                'price' => $product->price->value->raw,
-                'discount' => 0,
-                'stock' => $product->revision,
-                'category_id' => '1',
-            ];
-            foreach ($product->images as $index => $image) {
-                if($index>6) break;
-                $item["img_url_" . ($index + 1)] = $image->url;
+            foreach ($products as $product) {
+                $item = [
+                    'name' => $product->title,
+                    'description' => $product->description,
+                    'price' => $product->price->value->raw,
+                    'discount' => 0,
+                    'stock' => $product->revision,
+                    'category_id' => '1',
+                ];
+                foreach ($product->images as $index => $image) {
+                    if($index>6) break;
+                    $item["img_url_" . ($index + 1)] = $image->url;
+                }
+                Product::create($item);
             }
-            Product::create($item);
         }
+
     }
-    // Definimos la función cURL
+
     private  function curl($url) {
         $ch = curl_init($url); // Inicia sesión cURL
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Configura cURL para devolver el resultado como cadena

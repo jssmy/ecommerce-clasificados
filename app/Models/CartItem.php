@@ -8,7 +8,7 @@ class CartItem extends Model
 {
     //
     protected $guarded=['id'];
-    protected $table = 'cart_items';
+    protected $table = 'cart_item';
 
     public function scopeActive($query){
         return $query->where('active',1);
