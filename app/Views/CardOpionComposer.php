@@ -14,7 +14,13 @@ use App\Models\CardOption;
 class CardOpionComposer
 {
     public function compose(View $view){
-        $cardOption  = $cardOption ?? CardOption::with('items')->find(1);
+        //dd(in_array('cardOption',$view->getData()),array_keys($view->getData()));
+        $cardOption = null;
+        if(in_array('cardOption',array_keys($view->getData()))){
+            $cardOption = $view->getData()['cardOption'];
+        }
+        $cardOption  = $cardOption ?: CardOption::with('items')->find(1);
+
         return $view->with('cardOption',$cardOption);
     }
 }

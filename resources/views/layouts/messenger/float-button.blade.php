@@ -189,7 +189,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         font-size: 13px;
     }
     .card-option{
-        height: 160px;
+        min-height: 160px;
         width: 100%;
         display: flex;
         padding: 0px;
@@ -201,13 +201,12 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
 
     }
     .card-option-item{
-        width: 100%;
+        width: 92%;
         height: 100%;
         display: flex;
         margin-right: 10px;
         margin-left: 10px;
         flex-direction: column;
-        /*box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);*/
         box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.21);
         border: 1px solid #f2f2f2;
         border-radius: 10px;
@@ -227,13 +226,22 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
     .card-option-item-header i{
         font-size: 43px;
     }
+    .card-option-item-content ul{
+        margin-bottom: 20px;
+    }
+    .card-option-item-content ul li{
+        padding: 0px;
+        margin: 0px;
+    }
     .card-option-item-content{
-        display: flex;
-        height: 30%;
+        min-height: 30%;
         width: 100%;
         padding: 10px;
         font-weight: bold;
-        justify-content: space-around;
+        display: inline-block;
+        position: relative;
+        overflow-wrap: break-word;
+
     }
     .card-option-item-footer {
         height: 20%;
@@ -242,6 +250,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         text-align: center;
         cursor: pointer;
         display: flex;
+        justify-content: center;
     }
     .card-option-item-footer button{
         width: 100%;
@@ -257,6 +266,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         overflow: auto;
         overflow-x: hidden;
         padding-bottom: 8px;
+        width: 100%;
     }
     .card-option-move-left,
     .card-option-move-right,
@@ -444,6 +454,24 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
             }
             $(this).prev().animate({scrollLeft: '+=220px'});
         });
+
+        function createSendMessage(text) {
+            return  $("#template-out")
+                    .html()
+                    .replace('_content_',text).replace('_time_',formatedTime);
+        }
+
+
+        $(document).on('click','.card-option-item-footer button',function () {
+            var message = $(this).parent().data('message');
+            if(message){
+                valMessage= message;
+                $('.chat-list').append(createSendMessage(valMessage));
+                writing();
+            }
+        });
     });
+
+
 
 </script>

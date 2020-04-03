@@ -19,7 +19,8 @@ class CreateCardOptionItemsTable extends Migration
             $table->string('header_background')->default('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcREHxbijhe1ZwCHRlybXeQZbIbILW0mm8hrkmkE8yuhWgZxgUMl');
             $table->string('header');
             $table->string('content');
-            $table->string('footer');
+            $table->string('footer')->nullable();
+            $table->string('message',155);
             $table->timestamps();
         });
     }
