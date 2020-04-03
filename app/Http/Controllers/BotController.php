@@ -75,6 +75,7 @@ class BotController extends Controller
     }
 
     public function processRequest(Request $request){
-
+		$response = json_decode($request->all());
+		return $response;
     }
 }
