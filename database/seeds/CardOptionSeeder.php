@@ -21,21 +21,25 @@ class CardOptionSeeder extends Seeder
                 'card_option_id'=>$default->id,
                 'header'=>'<i class="fa fa-calendar" aria-hidden="true"></i>',
                 'content'=>'HORARIOS DE ATENCIÓN',
+				'message'=>'horario de atención',
                 'footer'=>'<button class="btn">👉 Información</button>'
             ],[
                 'card_option_id'=>$default->id,
                 'header'=>'<i class="fa fa-opencart" aria-hidden="true"></i>',
                 'content'=>'CONSULTA DE PRODUCTOS',
+				'message'=>'consultar productos',
                 'footer'=>'<button class="btn">👉 Consultar</button>'
             ],[
                 'card_option_id'=>$default->id,
                 'header'=>'<i class="fa fa-credit-card-alt" aria-hidden="true"></i>',
                 'content'=>'PROMOCIONES',
+				'message'=>'ver promociones',
                 'footer'=>'<button class="btn">👉 Información</button>'
             ],[
                 'card_option_id'=>$default->id,
                 'header'=>'<i class="fa fa-cart-plus" aria-hidden="true"></i>',
                 'content'=>'MIS PEDIDOS',
+				'message'=>'ver mis pedidos',
                 'footer'=>'<button class="btn">👉 Consultar</button>'
             ]
         ]);
