@@ -8,7 +8,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 class Product extends  Entity
 {
@@ -38,7 +37,7 @@ class Product extends  Entity
                 'updated_at'
     		];
 
-	
+
 	public static function cols()
     {
         return self::colsName;
