@@ -27,7 +27,6 @@ Route::group(['middleware'=>'auth'],function (){
 Route::group(['prefix'=>'messenger'],function (){
     Route::post('bot','BotController@processResponse')->name('bot.request');
     Route::get('defaut-card-option','BotController@loadDeaultCard')->name('bot.default-card');
-    Route::post('process-bot','BotController@processRequest')->name('bot.webhook');
 });
 
 Route::get('/','HomeController@index')->name('home')->middleware('searching');
