@@ -17,7 +17,7 @@ class Product extends  Entity
     protected $table='products';
     protected $guarded=['id'];
     protected $appends=['price_with_discount','with_discount','human_date_publication'];
-    protected $attributes=[
+    protected $colsName=[
                 'name',
                 'description',
                 'price',
@@ -36,8 +36,13 @@ class Product extends  Entity
                 'active',
                 'created_at',
                 'updated_at'
-    ];
+    		];
 
+	
+	public static function cols()
+    {
+        return self::colsName;
+    }
     public function scopeactive($query){
         return $query->where('active',1);
     }
