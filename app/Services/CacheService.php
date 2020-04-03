@@ -32,15 +32,17 @@ class CacheService
     }
     /** get new added products from user profile**/
     public static function authNewProducts(){
-        $products = Product::leftJoin(ProductInteraction::table().' as i','i.product_id',Product::table().'.id')
+        $products = Product::leftJoin(ProductInteraction::table().' as i',function ($q){
+                return $q->on('i.product_id','=',Product::table().'.id')
+                            ->where('user_id','=',auth()->id());
+            })
             ->orderByRaw('i.created_at desc,2 desc, rand()')
-            ->selectRaw(Product::table().".id as product,count(1) as cantidad")
-            ->groupBy(Product::table().'.id','i.created_at')
-            ->where('user_id',auth()->id())
-            ->take(10)
+            ->selectRaw(Product::table().".id as product,count(1) as cantidad,i.created_at")
+            ->groupBy(Product::table().'.id')
+            ->take(12)
             ->get();
 
-        return Product::whereIn('id',$products->pluck('product'))->take(10)->get();
+        return Product::whereIn('id',$products->pluck('product'))->orderByRaw('rand()')->get();
 
     }
 

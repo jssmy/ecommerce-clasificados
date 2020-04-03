@@ -14,7 +14,7 @@ class CardOptionSeeder extends Seeder
     {
         // default card option
         $default = CardOption::create([
-            'name'=>'default'
+            'name'=>'input.unknown'
         ]);
         CardOptionItem::insert([
             [
@@ -37,6 +37,18 @@ class CardOptionSeeder extends Seeder
                 'header'=>'<i class="fa fa-cart-plus" aria-hidden="true"></i>',
                 'content'=>'MIS PEDIDOS',
                 'footer'=>'<button class="btn">👉 Consultar</button>'
+            ]
+        ]);
+
+        $default = CardOption::create([
+            'name'=>'input.schedule'
+        ]);
+        CardOptionItem::insert([
+            [
+                'card_option_id'=>$default->id,
+                'header'=>'<i class="fa fa-calendar" aria-hidden="true"></i>',
+                'content'=>'CONTENIDO HORARIO',
+                'footer'=>null
             ]
         ]);
 

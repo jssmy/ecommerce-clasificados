@@ -20,9 +20,7 @@ class BotController extends Controller
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
     ];
-    const SUGGESTS=[
-        SELF::INPUT_UNKNOWN => 'default'
-    ];
+
     public function processResponse(Request $request){
         $access = ['credentials'=>'secret-client.json'];
 
@@ -82,12 +80,12 @@ class BotController extends Controller
 
     public function loadDeaultCard(Request $request){
         if($request->has('card') && $request->card!='false'){
-            $card = SELF::SUGGESTS[$request->card];
+            $card = $request->card;
             $cardOption  = CardOption::with('items')->where('name',$card)->first();
+
             return view('layouts.card-option.card-option',compact('cardOption'));
         }
         return view('layouts.card-option.card-option');
-
     }
 
 }

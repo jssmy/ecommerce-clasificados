@@ -3,7 +3,9 @@
         {!! $item->header !!}
     </div>
     <div class="card-option-item-content">{!! $item->content !!}</div>
-    <div class="card-option-item-footer">
-        {!! $item->footer !!}
-    </div>
+    @if($item->footer)
+        <div data-message="{{$item->message}}" class="card-option-item-footer">
+            {!! $item->footer !!}
+        </div>
+    @endif
 </div>
