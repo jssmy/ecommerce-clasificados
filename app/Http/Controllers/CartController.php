@@ -46,4 +46,16 @@ class CartController extends Controller
         $item->save();
         return view('layouts.cart.direct-access');
     }
+	
+	public function updateQuantity(Request $request, CartItem $item){
+		if($request->action=='remove'){
+			$item->quatity--;
+		}else {
+			$item->quatity++;
+		}	
+		$item->save();
+		return response()->json([
+		'mesage'=>'updated'
+	]);
+	}
 }

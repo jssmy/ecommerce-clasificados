@@ -11,7 +11,7 @@ class CartItem extends Model
     protected $table = 'cart_item';
 
     public function scopeActive($query){
-        return $query->where('active',1);
+        return $query->where('active',1)->where('quatity','>',0);
     }
 
     public function product(){

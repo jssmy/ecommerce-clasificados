@@ -9,7 +9,7 @@
     </div>
     <div class="product-body">
         <p class="product-category">Category</p>
-        <h3 data-title="{{ $product->name }}" class="product-name"><a href="#">{{$product->short_name}}</a></h3>
+        <h3 class="product-name"><a href="#">{{$product->short_name}}</a></h3>
         <h4 class="product-price">S/. {{$product->price_with_discount}} <del class="product-old-price">S/. {{$product->price}}</del></h4>
         <div class="product-btns">
             <a href="{{route('product.detail',$product)}}" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Ver detalles</span></a>

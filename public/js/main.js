@@ -160,13 +160,13 @@ $(document).ready(function () {
             }
         });
     });
-    function updateCart() {
+    window.updateCart = function () {
         $.get(url_updat_lista_cart, function (view) {
             $(".cart-list-item").html(view);
         });
     }
 
-    function deleteCart(btn){
+    window.deleteCart=function(btn){
         var url = $(btn).data('url');
         $.ajax({
             url : url,
@@ -177,11 +177,110 @@ $(document).ready(function () {
         });
     }
     $(document).on('click','.delete',function () {
-        deleteCart($(this));
+        window.deleteCart($(this));
     });
 
     $('.delete').click(function () {
-        deleteCart($(this));
+        window.deleteCart($(this));
     });
+	
+	$(document).on('click','.update-cart-quantity',function(){
+	 var btn  = $(this);
+	 var input=  null;
+	 if($(this).hasClass('btn-remove-product')){
+		 input = $(this).next();
+	 }else{
+		 input = $(this).prev();
+	 }
+		 
+	var quatity = parseInt(input.text());
+	 var url = $(this).data('url');
+	 var action = $(this).data('action');
+ 	$.ajax({
+		url : url,
+		type: 'put',
+		data: {action : action},
+		success: function(){
+			if(action=='remove'){
+				quatity--;
+			}else {
+				quatity++;
+			}
+			if(quatity<=0){
+				btn.parent().html('<i class="fa fa-remove"></i>REMOVIDO');
+				
+			}
+			input.text(quatity);
+			window.updateCart();
+		}, beforeSend: function(){
+			$('.update-cart-quantity').attr('disabled',true);
+		}, complete: function(){
+			$('.update-cart-quantity').removeAttr('disabled');
+		}
+	});
+	 	
+ 	})
+	
+	$(document).on('click','.btn-next-step',function(){
+		var content = $(this).parent().prev();
+		var currentSection = content.find('.active');
+		var nextSection = currentSection.next();
+		
+		if(nextSection.length){
+			currentSection.removeClass('active');
+			currentSection.addClass('hide');
+			nextSection.removeClass('hide');
+			nextSection.addClass('active');
+		}
+		$('.btn-prev-step').removeClass('hide');
+	});
+	
+	$(document).on('click','.btn-prev-step', function(){
+		var content = $(this).parent().prev();
+		var currentSection = content.find('.active');
+		var prevSection = currentSection.prev();
+		
+		
+		if(prevSection.length){
+			currentSection.removeClass('active');
+			currentSection.addClass('hide');
+			prevSection.removeClass('hide');
+			prevSection.addClass('active');
+			
+		}
+	});
+	
+	 function getLocation(force) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        }
+    }
+	
+	$(document).on('click','.btn-localization', function(){
+		getLocation(true);
+	});
+
+    function showPosition(position) {
+        localStorage.setItem('geo',JSON.stringify({ latitude: position.coords.latitude, longitude:  position.coords.longitude }));
+    }
+
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                console.error("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                cosole.error("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                console.error("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                console.error("An unknown error occurred.");
+                break;
+        }
+    }
+
+    getLocation();
 
 });

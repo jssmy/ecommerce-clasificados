@@ -50,6 +50,20 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         display: flex;
         align-items: center;
     }
+	
+	.chat-list li {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+	.list-product{
+		margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+		overflow-y: auto;
+    	display: flex;
+    	align-items: center
+	}
 
     .chat-list .chat-img {
         float: left;
@@ -244,6 +258,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
 
     }
     .card-option-item-footer {
+		margin-top: 15px;
         height: 20%;
         width: 100%;
         font-weight: bold;
@@ -292,6 +307,61 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         justify-content: flex-end;
         color: rgba(0, 0, 0, .45);;
     }
+	
+	.btn-warning-off{
+		background-color: white;
+		border-style: solid;
+		border-color: #aeae37;
+		border-width: 1px;
+		color: #aeae37;
+		height: 30px;
+		border-radius: 20px;
+		padding: 0px;
+		padding-left: 11px;
+		padding-right: 10px
+	}
+	.card-accion{
+		display:flex;
+		margin-bottom: 5px;
+		justify-content: center;
+	}
+	
+
+	.card-accion button{
+		background-color: white;
+		border-style: solid;
+		border-color: #aeae37;
+		border-width: 1px;
+		color: #aeae37;
+		width: 40%;
+		border-radius: 7px;
+		padding: 0px;
+	}
+	
+	.btn-plus-product{
+		border-bottom-left-radius: 0px !important;
+		border-top-left-radius: 0px !important;		
+	}
+	.btn-remove-product{
+		border-bottom-right-radius: 0px !important;
+		border-top-right-radius: 0px !important;		
+	}
+	.card-input-quatity{
+		height:20px;
+		width:60px;
+		color: #aeae37;
+		border-style: solid;
+		border-width: 1px;
+		border-left-width: 0px;
+		border-right-width: 0px;
+	}
+	.btn-localization{
+		padding: 0px;
+		border-radius: 0% !important;
+		height:30px !important;
+	
+	}
+	
 
 
 </style>
@@ -366,20 +436,35 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 <script>
 
     $(document).ready(function () {
+		localStorage.removeItem('lastTime');
         var valMessage = 'hola';
-        var sendMessage = new Audio("{{URL::asset('/public/notification/button-confirmation.wav')}}");
-        var newMessage = new Audio("{{URL::asset('/public/notification/button-notification.wav')}}");
+        var sendMessage = new Audio("{{URL::asset('/public/notification/sent.mp3')}}");
+        var newMessage = new Audio("{{URL::asset('/public/notification/income.mp3')}}");
         var defaultCardOption = "{{route('bot.default-card')}}";
+		var url_load_my_cart = "{{route('bot.load-my-cart')}}";
         function scrollTop(){
-            $('.card-body').animate({scrollTop : ($('.in').length*$('.in').height())+ ($('.out').length*$('.out').height())+($('.in').height()+$('.out').height())*10});
+			console.log($('.card-body').scrollTop());
+            $('.card-body').animate({scrollTop : ($('.in').length*$('.in').height())+ 
+									 ($('.out').length*$('.out').height())+
+									 ($('.in').height()+$('.out').height())*10 + $('.chat-list').scrollTop()+$('.card-body').scrollTop()});
         }
         function loadDefaultCard(card){
             if($('.card-option-conent').length && !card) return;
             $.get(defaultCardOption+'?card='+card,function (view) {
                 $('.chat-list').append(view);
                 scrollTop();
+				newMessage.play();
             });
         }
+		
+		function loadMyCart(){
+			$.get(url_load_my_cart, function(view){
+				$('.chat-list').append(view);
+                scrollTop();
+				newMessage.play();
+			});
+		}
+		
         var writing = function (){
             $('.chat-user-info').find('div').html('<i class="fa fa-circle" aria-hidden="true"></i> escribiendo...');
             $.ajax({
@@ -387,22 +472,28 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 url : "{{route('bot.request')}}",
                 data: {requestText : valMessage},
                 success: function (response) {
-                    console.log('evalundo: ', response.loadSuggest,response.loadSuggest!=false,response.loadSuggest ? true : false);
-                    if(response.loadSuggest!=false){
-                        console.log('adentro');
+                    if(response.loadSuggest=='input.my_cart'){
+						console.log('load my cart');
+						loadMyCart();
+					}
+                    else if(response.loadSuggest!=false){
                         loadDefaultCard(response.loadSuggest);
                     }
-                    var recivedMessage = $("#template-in")
+                    
+					var recivedMessage = $("#template-in")
                                             .html()
                                             .replace('_content_',response.responseText)
                                             .replace('_time_',formatedTime);
+					
                     $('.chat-list').append(recivedMessage);
                     newMessage.play();
 
                 }, complete(){
                     stopWriting();
                     scrollTop();
-                }
+                }, beforeSend: function(){
+					localStorage.setItem('lastTime',new Date());
+				}
             });
         }
         var formatedTime= function () {
@@ -421,10 +512,12 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 valMessage =$(this).val();
                 var message = $("#template-out")
                                 .html()
-                                .replace('_content_',valMessage).replace('_time_',formatedTime);
+                                .replace('_content_',valMessage)
+								.replace('_time_',formatedTime);
                 $('.chat-list').append(message);
                 $(this).val('');
                 scrollTop();
+				
                 setTimeout(writing,1000);
             }
         });
@@ -467,11 +560,27 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
             if(message){
                 valMessage= message;
                 $('.chat-list').append(createSendMessage(valMessage));
-                writing();
+				sendMessage.play();
+				writing();
+				scrollTop();
             }
         });
+		
+		/*  check la time writing**/
+		window.setInterval(function(){
+			var lastTime = localStorage.getItem('lastTime');
+			if(lastTime){
+				var time = new Date(lastTime);
+				var minute =  Math.round(((new Date()-time)/1000)/60);
+				console.log('time: '+minute);
+				 if(minute>=3){
+					 loadDefaultCard('input.unkown');
+					 localStorage.removeItem('lastTime');
+				 }
+			}
+		},1000);
     });
-
-
+	
 
 </script>
+

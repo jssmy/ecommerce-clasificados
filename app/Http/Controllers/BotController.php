@@ -10,12 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use App\Models\CardOption;
+use App\Models\CartItem;
+use App\Models\Product;
 class BotController extends Controller
 {
     //
-    var $suggest;
+    var $suggest=false;
     const INPUT_UNKNOWN='input.unknown';
     const INPUT_SCHEDULE='input.schedule';
+	const INPUT_MY_CART='input.my_cart';
     const MAX_INPUT_UNKNOWN= 3;
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
@@ -54,27 +57,34 @@ class BotController extends Controller
         }
 
         if(Cache::get(session()->getId())>SELF::MAX_INPUT_UNKNOWN){
-
             $messages = (array)json_decode(File::get('messages.json'));
-            $index = array_search($queryResult->getAction(),SELF::DETECT_SUGGEST);
-            $this->suggest = SELF::DETECT_SUGGEST[$index];
-            $queryResult->setFulfillmentText(collect($messages[$this->suggest])->random());
+            $this->suggest = $queryResult->getAction();
+            $queryResult->setFulfillmentText(collect($messages[$queryResult->getAction()])->random());
             Cache::forget(session()->getId());
         }
         return $queryResult;
     }
 
-    private function delectSchedule(QueryResult $queryResult){
+    private function detectSchedule(QueryResult $queryResult){
         if($queryResult->getAction()==self::INPUT_SCHEDULE){
             $this->suggest = $queryResult->getAction();
         }
         return $queryResult;
     }
+	
+	private function detectMyCart(QueryResult $queryResult){
+		if($queryResult->getAction()==self::INPUT_MY_CART){
+			$this->suggest = $queryResult->getAction();
+		}
+		return $queryResult;
+	}
 
     private  function detectSuggest(QueryResult $queryResult){
 
         $queryResult = $this->detectUnknow($queryResult);
-        $queryResult = $this->delectSchedule($queryResult);
+        $queryResult = $this->detectSchedule($queryResult);
+		$queryResult = $this->detectMyCart($queryResult);
+		
         return $queryResult;
     }
 
@@ -87,5 +97,19 @@ class BotController extends Controller
         }
         return view('layouts.card-option.card-option');
     }
-
+	
+	public function loadMyCard(){
+		$items = CartItem::where('user_id',auth()->id())->active()->with('product')->get();
+		return view('layouts.messenger.my-cart',compact('items'));
+	
+	}
+	
+	public function search(Request $request){
+		if($request->buscar){
+            $products = Product::where('description','like',"%$request->buscar%")
+                        ->orWhere('name','like',"%$request->buscar%")->paginate(12);
+            session()->put('results',$products->total());
+            return view('layouts.messenger.search.products',compact('products'));
+        }
+	}
 }

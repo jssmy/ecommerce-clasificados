@@ -52,7 +52,7 @@ class CardOptionSeeder extends Seeder
                 'card_option_id'=>$default->id,
                 'header'=>'<i class="fa fa-calendar" aria-hidden="true"></i>',
                 'content'=>'CONTENIDO HORARIO',
-                'footer'=>null
+                'footer'=>'NUESTRO HORARIO'
             ]
         ]);
 
