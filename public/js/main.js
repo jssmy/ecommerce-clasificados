@@ -251,13 +251,13 @@ $(document).ready(function () {
 	});
 
 	 function getLocation() {
-	     console.log('CONSULTAR LOCALIZACION');
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         }
     }
 
 	$(document).on('click','.btn-localization', function(){
+	    console.log('---- GEOLICALIZACION ----');
 		getLocation();
         getCurrentLocation($(this));
 	});
