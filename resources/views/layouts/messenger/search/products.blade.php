@@ -7,7 +7,7 @@
             @each('layouts.messenger.search.product-item',$products,'product','layouts.messenger.no-items')
         </div>
     </div>
-    @if($product->count()>1)
+    @if($products->count()>1)
         <button class="btn card-option-move-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
     @endif
 </li>

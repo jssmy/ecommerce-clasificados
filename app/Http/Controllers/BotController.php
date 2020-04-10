@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\CardOption;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Services\GeolocalizationService;
 class BotController extends Controller
 {
     //
@@ -19,6 +20,7 @@ class BotController extends Controller
     const INPUT_UNKNOWN='input.unknown';
     const INPUT_SCHEDULE='input.schedule';
 	const INPUT_MY_CART='input.my_cart';
+	const INPUT_SEARCH_PRODUCTS ='input.search';
     const MAX_INPUT_UNKNOWN= 3;
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
@@ -46,7 +48,8 @@ class BotController extends Controller
         return response()->json([
             'requestText'=>$queryResult->getQueryText(),
             'responseText'=>$queryResult->getFulfillmentText(),
-            'loadSuggest'=>$this->suggest
+            'loadSuggest'=>$this->suggest,
+            'parameters'=>$queryResult->getOriginalParameters()
         ]);
 
     }
@@ -71,7 +74,7 @@ class BotController extends Controller
         }
         return $queryResult;
     }
-	
+
 	private function detectMyCart(QueryResult $queryResult){
 		if($queryResult->getAction()==self::INPUT_MY_CART){
 			$this->suggest = $queryResult->getAction();
@@ -79,14 +82,26 @@ class BotController extends Controller
 		return $queryResult;
 	}
 
+    private function detectGeneridSuggest(QueryResult $queryResult){
+        if(in_array($queryResult->getAction(),[
+            SELF::INPUT_SEARCH_PRODUCTS,
+            SELF::INPUT_MY_CART,
+            SELF::INPUT_SCHEDULE
+        ])){
+            $this->suggest = $queryResult->getAction();
+        }
+        return $queryResult;
+    }
+
     private  function detectSuggest(QueryResult $queryResult){
 
         $queryResult = $this->detectUnknow($queryResult);
-        $queryResult = $this->detectSchedule($queryResult);
-		$queryResult = $this->detectMyCart($queryResult);
-		
+        $queryResult = $this->detectGeneridSuggest($queryResult);
         return $queryResult;
     }
+
+
+
 
     public function loadDeaultCard(Request $request){
         if($request->has('card') && $request->card!='false'){
@@ -97,19 +112,24 @@ class BotController extends Controller
         }
         return view('layouts.card-option.card-option');
     }
-	
+
 	public function loadMyCard(){
 		$items = CartItem::where('user_id',auth()->id())->active()->with('product')->get();
 		return view('layouts.messenger.my-cart',compact('items'));
-	
+
 	}
-	
+
 	public function search(Request $request){
 		if($request->buscar){
-            $products = Product::where('description','like',"%$request->buscar%")
-                        ->orWhere('name','like',"%$request->buscar%")->paginate(12);
+		    $key = implode(' ',$request->buscar);
+            $products = Product::where('description','like',"% $key %")
+                        ->orWhere('name','like',"% $key %")->paginate(12);
             session()->put('results',$products->total());
             return view('layouts.messenger.search.products',compact('products'));
         }
 	}
+
+	public function location($latitude,$longitude){
+        return GeolocalizationService::getAll($latitude,$longitude);
+    }
 }

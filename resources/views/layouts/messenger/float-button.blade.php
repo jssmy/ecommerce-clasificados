@@ -50,7 +50,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         display: flex;
         align-items: center;
     }
-	
+
 	.chat-list li {
         margin-bottom: 10px;
         display: flex;
@@ -307,7 +307,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         justify-content: flex-end;
         color: rgba(0, 0, 0, .45);;
     }
-	
+
 	.btn-warning-off{
 		background-color: white;
 		border-style: solid;
@@ -325,7 +325,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
 		margin-bottom: 5px;
 		justify-content: center;
 	}
-	
+
 
 	.card-accion button{
 		background-color: white;
@@ -337,14 +337,14 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
 		border-radius: 7px;
 		padding: 0px;
 	}
-	
+
 	.btn-plus-product{
 		border-bottom-left-radius: 0px !important;
-		border-top-left-radius: 0px !important;		
+		border-top-left-radius: 0px !important;
 	}
 	.btn-remove-product{
 		border-bottom-right-radius: 0px !important;
-		border-top-right-radius: 0px !important;		
+		border-top-right-radius: 0px !important;
 	}
 	.card-input-quatity{
 		height:20px;
@@ -359,9 +359,9 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
 		padding: 0px;
 		border-radius: 0% !important;
 		height:30px !important;
-	
+
 	}
-	
+
 
 
 </style>
@@ -442,9 +442,10 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         var newMessage = new Audio("{{URL::asset('/public/notification/income.mp3')}}");
         var defaultCardOption = "{{route('bot.default-card')}}";
 		var url_load_my_cart = "{{route('bot.load-my-cart')}}";
+		var url_search_product ="{{route('bot.search-products')}}";
         function scrollTop(){
 			console.log($('.card-body').scrollTop());
-            $('.card-body').animate({scrollTop : ($('.in').length*$('.in').height())+ 
+            $('.card-body').animate({scrollTop : ($('.in').length*$('.in').height())+
 									 ($('.out').length*$('.out').height())+
 									 ($('.in').height()+$('.out').height())*10 + $('.chat-list').scrollTop()+$('.card-body').scrollTop()});
         }
@@ -456,7 +457,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 				newMessage.play();
             });
         }
-		
+
 		function loadMyCart(){
 			$.get(url_load_my_cart, function(view){
 				$('.chat-list').append(view);
@@ -464,27 +465,38 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 				newMessage.play();
 			});
 		}
-		
+        function seachProducts(params) {
+            $.ajax({
+                url : url_search_product,
+                data: {buscar: params },
+                success: function (view) {
+                    $('.chat-list').append(view);
+                    scrollTop();
+                }
+            });
+
+        }
         var writing = function (){
             $('.chat-user-info').find('div').html('<i class="fa fa-circle" aria-hidden="true"></i> escribiendo...');
             $.ajax({
-                type: 'post',
+                type: 'get',
                 url : "{{route('bot.request')}}",
                 data: {requestText : valMessage},
                 success: function (response) {
                     if(response.loadSuggest=='input.my_cart'){
 						console.log('load my cart');
 						loadMyCart();
-					}
-                    else if(response.loadSuggest!=false){
+					} else if(response.loadSuggest=='input.search'){
+                        seachProducts(response.parameters);
+                    } else if(response.loadSuggest!=false){
                         loadDefaultCard(response.loadSuggest);
                     }
-                    
+
 					var recivedMessage = $("#template-in")
                                             .html()
                                             .replace('_content_',response.responseText)
                                             .replace('_time_',formatedTime);
-					
+
                     $('.chat-list').append(recivedMessage);
                     newMessage.play();
 
@@ -517,7 +529,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 $('.chat-list').append(message);
                 $(this).val('');
                 scrollTop();
-				
+
                 setTimeout(writing,1000);
             }
         });
@@ -565,7 +577,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 				scrollTop();
             }
         });
-		
+
 		/*  check la time writing**/
 		window.setInterval(function(){
 			var lastTime = localStorage.getItem('lastTime');
@@ -580,7 +592,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 			}
 		},1000);
     });
-	
+
 
 </script>
 

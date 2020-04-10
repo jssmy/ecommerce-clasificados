@@ -21,18 +21,21 @@ Route::group(['middleware'=>'auth'],function (){
         Route::get('detail-cart','CartController@detailCart')->name('cart.detail-items');
 
         Route::put('delete-from-cart/{item}','CartController@deleteFromCart')->name('delete-from-cart');
-		
+
 		Route::put('update-cart-quantity/{item}','CartController@updateQuantity')->name('update-cart-quantity');;
     });
 });
 
 Route::group(['prefix'=>'messenger'],function (){
-    Route::post('bot','BotController@processResponse')->name('bot.request');
+    Route::get('bot','BotController@processResponse')->name('bot.request');
     Route::get('defaut-card-option','BotController@loadDeaultCard')->name('bot.default-card');
 	Route::get('load-my-cart','BotController@loadMyCard')->name('bot.load-my-cart');
+	Route::get('sarch','BotController@search')->name('bot.search-products');
 });
 
 Route::get('/','HomeController@index')->name('home')->middleware('searching');
+
+Route::get('/geolocation/{latitude}/{longitude}','BotController@location')->name('geo.location');
 
 Route::group(['prefix'=>'product'],function (){
     Route::get('detail/{product}','ProductController@productDetail')

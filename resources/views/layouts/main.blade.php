@@ -71,6 +71,27 @@
 <script src="{{ URL::asset('/public/js/jquery-validation/dist/localization/messages_es.js') }}"></script>
 <script src="{{URL::asset('public/js/main.js')}}"></script>
 <script>
+    var url_geolocation = "{{route('geo.location',['_latitude_','_longitude_'])}}";
+    function getCurrentLocation(btn){
+        var currentContent = btn.html()
+        var location = JSON.parse(localStorage.getItem('geo'));
+        $.ajax({
+            url: url_geolocation.replace('_latitude_',location.latitude).replace('_longitude_',location.longitude),
+            success: function(locate){
+                locate = JSON.parse(locate);
+                if(!locate.success){
+                    $(btn.data('out')).val(locate.address)
+                }
+            },
+            beforeSend: function () {
+                btn.html('<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>\n');
+                btn.attr('disabled',true);
+            }, complete: function () {
+                btn.html(currentContent);
+                btn.removeAttr('disabled');
+            }
+        });
+    }
     $(document).on('click','a',function (e) {
         console.log($(this).attr('href'));
         if($(this).attr('href')=='#'){

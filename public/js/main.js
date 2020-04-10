@@ -183,7 +183,7 @@ $(document).ready(function () {
     $('.delete').click(function () {
         window.deleteCart($(this));
     });
-	
+
 	$(document).on('click','.update-cart-quantity',function(){
 	 var btn  = $(this);
 	 var input=  null;
@@ -192,7 +192,7 @@ $(document).ready(function () {
 	 }else{
 		 input = $(this).prev();
 	 }
-		 
+
 	var quatity = parseInt(input.text());
 	 var url = $(this).data('url');
 	 var action = $(this).data('action');
@@ -208,7 +208,7 @@ $(document).ready(function () {
 			}
 			if(quatity<=0){
 				btn.parent().html('<i class="fa fa-remove"></i>REMOVIDO');
-				
+
 			}
 			input.text(quatity);
 			window.updateCart();
@@ -218,14 +218,14 @@ $(document).ready(function () {
 			$('.update-cart-quantity').removeAttr('disabled');
 		}
 	});
-	 	
+
  	})
-	
+
 	$(document).on('click','.btn-next-step',function(){
 		var content = $(this).parent().prev();
 		var currentSection = content.find('.active');
 		var nextSection = currentSection.next();
-		
+
 		if(nextSection.length){
 			currentSection.removeClass('active');
 			currentSection.addClass('hide');
@@ -234,30 +234,32 @@ $(document).ready(function () {
 		}
 		$('.btn-prev-step').removeClass('hide');
 	});
-	
+
 	$(document).on('click','.btn-prev-step', function(){
 		var content = $(this).parent().prev();
 		var currentSection = content.find('.active');
 		var prevSection = currentSection.prev();
-		
-		
+
+
 		if(prevSection.length){
 			currentSection.removeClass('active');
 			currentSection.addClass('hide');
 			prevSection.removeClass('hide');
 			prevSection.addClass('active');
-			
+
 		}
 	});
-	
-	 function getLocation(force) {
+
+	 function getLocation() {
+	     console.log('CONSULTAR LOCALIZACION');
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         }
     }
-	
+
 	$(document).on('click','.btn-localization', function(){
-		getLocation(true);
+		getLocation();
+        getCurrentLocation($(this));
 	});
 
     function showPosition(position) {
