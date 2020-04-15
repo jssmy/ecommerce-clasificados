@@ -222,17 +222,57 @@ $(document).ready(function () {
  	})
 
 	$(document).on('click','.btn-next-step',function(){
+
 		var content = $(this).parent().prev();
 		var currentSection = content.find('.active');
 		var nextSection = currentSection.next();
 
+        /* validar inputs */
+		var form  = $(this).parent().prev().find('.order-form');
+		if(form){
+            form.validate({
+                errorPlacement: function () {}
+            });
+            if(!form.valid()) {
+                return true;
+            }
+        }
+
+		/*mostrar next*/
+        $('.btn-prev-step').removeClass('hide');
 		if(nextSection.length){
 			currentSection.removeClass('active');
 			currentSection.addClass('hide');
 			nextSection.removeClass('hide');
 			nextSection.addClass('active');
+			return true;
 		}
-		$('.btn-prev-step').removeClass('hide');
+		/* confirmar compra */
+
+        if(form){
+            $.ajax({
+                url: url_generate_order,
+                type: 'post',
+                data: form.serializeArray(),
+                beforeSend: function () {
+                    $('.btn-next-step').html('<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i> Procesando...');
+                    $('.btn-next-step').attr('disabled',true);
+                    $('.btn-prev-step').attr('disabled',true);
+                },error: function () {
+                    $('.btn-next-step').html('Cotinuar compra');
+                    $('.btn-next-step').removeAttr('disabled',true)
+                    $('.btn-prev-step').removeAttr('disabled')
+                }, success: function (order) {
+                    $('.btn-next-step').remove();
+                    $('.btn-prev-step').remove();
+                    $('.order-code').html(order.code);
+                    $('.order-code').parent().removeClass('hide');
+
+                }
+            });
+        }
+
+
 	});
 
 	$(document).on('click','.btn-prev-step', function(){
@@ -282,6 +322,10 @@ $(document).ready(function () {
                 break;
         }
     }
+
+    $(document).on('keyup','[name=direction]',function () {
+        $('.order-address').html($(this).val());
+    });
 
     getLocation();
 

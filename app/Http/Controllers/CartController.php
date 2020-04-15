@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\CartItem;
+use App\Models\OrderBuy;
+use App\Models\OrderBuyItem;
 use App\Http\Requests\AddCartRequest;
 class CartController extends Controller
 {
@@ -46,16 +48,40 @@ class CartController extends Controller
         $item->save();
         return view('layouts.cart.direct-access');
     }
-	
+
 	public function updateQuantity(Request $request, CartItem $item){
 		if($request->action=='remove'){
 			$item->quatity--;
 		}else {
 			$item->quatity++;
-		}	
+		}
 		$item->save();
 		return response()->json([
 		'mesage'=>'updated'
 	]);
 	}
+
+	public function generateOrder(Request $request){
+        $order = null;
+        \DB::transaction(function () use ($request, &$order){
+            $items = CartItem::active()->own()->get();
+            $order = OrderBuy::create([
+                'code' => OrderBuy::code(),
+                'address'=> $request->direction,
+                'user_name'=>$request->name,
+                'user_id'=>auth()->id(),
+                'total'=>$items->sum('price_with_discount'),
+            ]);
+            $items->each(function ($item) use ($order){
+                OrderBuyItem::create([
+                    'order_id'=>$order->id,
+                    'cart_item_id'=>$item->id
+                ]);
+            });
+            CartItem::own()->active()->update([
+                'active'=>0
+            ]);
+        });
+        return response()->json($order);
+    }
 }

@@ -22,7 +22,10 @@ Route::group(['middleware'=>'auth'],function (){
 
         Route::put('delete-from-cart/{item}','CartController@deleteFromCart')->name('delete-from-cart');
 
-		Route::put('update-cart-quantity/{item}','CartController@updateQuantity')->name('update-cart-quantity');;
+		Route::put('update-cart-quantity/{item}','CartController@updateQuantity')->name('update-cart-quantity');
+
+		Route::post('generate-order','CartController@generateOrder')->name('generate.order');
+
     });
 });
 

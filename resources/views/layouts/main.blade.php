@@ -47,6 +47,9 @@
             color: red !important;
             font-size: 11px !important;
         }
+        .error{
+            border-color: red;
+        }
     </style>
 </head>
 <body>
@@ -72,9 +75,18 @@
 <script src="{{URL::asset('public/js/main.js')}}"></script>
 <script>
     var url_geolocation = "{{route('geo.location',['_latitude_','_longitude_'])}}";
+    var url_generate_order = "{{route('generate.order')}}";
     function getCurrentLocation(btn){
         var currentContent = btn.html()
         var location = JSON.parse(localStorage.getItem('geo'));
+        if(!location){
+            $(btn.data('out'))
+                .parent()
+                .parent()
+                .append('<span style="font-size: 11px">No se ha podido obtener la dirección</span>');
+            $(btn).attr('disabled',true);
+            return ;
+        }
         $.ajax({
             url: url_geolocation.replace('_latitude_',location.latitude).replace('_longitude_',location.longitude),
             success: function(locate){
