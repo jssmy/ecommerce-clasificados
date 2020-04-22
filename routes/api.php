@@ -17,4 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
-Route::post('process-bot','BotController@processRequest')->name('bot.webhook');
+
+Route::post('webhook','BotController@webhook')->name('webhook');

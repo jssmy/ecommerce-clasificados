@@ -15,6 +15,15 @@ use App\Models\Product;
 use App\Services\GeolocalizationService;
 class BotController extends Controller
 {
+	 const BODY_RESPONSE_INTENT='{
+                      "payload": {
+                        "google": {
+                          "systemIntent": {
+                            
+                          }
+                        }
+                      }
+                    }';
     //
     var $suggest=false;
     const INPUT_UNKNOWN='input.unknown';
@@ -133,6 +142,32 @@ class BotController extends Controller
     }
 
     public function webhook(Request $request){
-        dd($request->all());
+		$payload = $request->all();
+		$queryResult = $payload['queryResult'];
+		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
+			$params = $queryResult['parameters'];
+			$product 	= $params['product'];
+			$marca 		= $params['marca'];
+			$fulfillmentText     = isset($queryResult["fulfillmentText"])?$queryResult["fulfillmentText"]:"";
+			$fulfillmentMessages = $queryResult["fulfillmentMessages"];
+			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
+
+			$products = Product::whereRaw('1=1');
+			foreach($product as $value){
+				$products = $products->where(function($query) use ($value){
+					$query->orWhere('name','like',"% $value %");
+				});
+			}
+			$products = $products->get();
+			
+			$fulfillmentText = empty($fulfillmentText)?'Esto es lo que estás buscando':$fulfillmentText;
+			$fulfillmentText = $products->isEmpty()?"Lo siento, no he encontrado ningún producto con estas características":$fulfillmentText;
+			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
+			$body->fulfillmentText=$fulfillmentText;
+			$body->fulfillmentMessages=$fulfillmentMessages;
+			$body->payload->items= ["data"=>$products];
+			return response()->json($body);
+
+		}
     }
 }
