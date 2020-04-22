@@ -42,8 +42,8 @@ class BotController extends Controller
 
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
-
         $queryResult = $this->detectSuggest($queryResult);
+
 
         return response()->json([
             'requestText'=>$queryResult->getQueryText(),
@@ -51,7 +51,6 @@ class BotController extends Controller
             'loadSuggest'=>$this->suggest,
             'parameters'=>$queryResult->getOriginalParameters()
         ]);
-
     }
     private function detectUnknow(QueryResult $queryResult){
         if(in_array($queryResult->getAction(),SELF::DETECT_SUGGEST)){
@@ -131,5 +130,9 @@ class BotController extends Controller
 
 	public function location($latitude,$longitude){
         return GeolocalizationService::getAll($latitude,$longitude);
+    }
+
+    public function webhook(Request $request){
+        dd($request->all());
     }
 }

@@ -34,6 +34,7 @@ Route::group(['prefix'=>'messenger'],function (){
     Route::get('defaut-card-option','BotController@loadDeaultCard')->name('bot.default-card');
 	Route::get('load-my-cart','BotController@loadMyCard')->name('bot.load-my-cart');
 	Route::get('sarch','BotController@search')->name('bot.search-products');
+	Route::post('webhook','BotController@webhook')->name('webhook');
 });
 
 Route::get('/','HomeController@index')->name('home')->middleware('searching');
