@@ -71,6 +71,7 @@ class BotController extends Controller
         $items = json_decode($items,true);
 
         $message = $queryResult->getFulfillmentText();
+
         return view('layouts.messenger.response',compact('items','message'));
     }
 
