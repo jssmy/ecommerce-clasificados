@@ -13,6 +13,8 @@ use App\Models\CardOption;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Services\GeolocalizationService;
+
+
 class BotController extends Controller
 {
 	 const BODY_RESPONSE_INTENT='{
@@ -51,16 +53,27 @@ class BotController extends Controller
 
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
+
         $queryResult = $this->detectSuggest($queryResult);
 
+        $items = '[]';
+        if($queryResult->getWebhookPayload()){
+            if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
+                $items = $queryResult
+                    ->getWebhookPayload()
+                    ->getFields()
+                    ->offsetGet('items')
+                    ->serializeToJsonString()
+                ;
+            }
+        }
 
-        return response()->json([
-            'requestText'=>$queryResult->getQueryText(),
-            'responseText'=>$queryResult->getFulfillmentText(),
-            'loadSuggest'=>$this->suggest,
-            'parameters'=>$queryResult->getOriginalParameters()
-        ]);
+        $items = json_decode($items,true);
+
+        $message = $queryResult->getFulfillmentText();
+        return view('layouts.messenger.response',compact('items','message'));
     }
+
     private function detectUnknow(QueryResult $queryResult){
         if(in_array($queryResult->getAction(),SELF::DETECT_SUGGEST)){
             $intends = Cache::get(session()->getId()) + 1;
@@ -115,7 +128,6 @@ class BotController extends Controller
         if($request->has('card') && $request->card!='false'){
             $card = $request->card;
             $cardOption  = CardOption::with('items')->where('name',$card)->first();
-
             return view('layouts.card-option.card-option',compact('cardOption'));
         }
         return view('layouts.card-option.card-option');
@@ -159,7 +171,7 @@ class BotController extends Controller
 				});
 			}
 			$products = $products->get();
-			
+
 			$fulfillmentText = empty($fulfillmentText)?'Esto es lo que estás buscando':$fulfillmentText;
 			$fulfillmentText = $products->isEmpty()?"Lo siento, no he encontrado ningún producto con estas características":$fulfillmentText;
 			$body = json_decode(SELF::BODY_RESPONSE_INTENT);

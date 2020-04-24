@@ -483,6 +483,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 url : "{{route('bot.request')}}",
                 data: {requestText : valMessage},
                 success: function (response) {
+                    /*
                     if(response.loadSuggest=='input.my_cart'){
 						console.log('load my cart');
 						loadMyCart();
@@ -498,6 +499,8 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                                             .replace('_time_',formatedTime);
 
                     $('.chat-list').append(recivedMessage);
+                    */
+                    $('.chat-list').append(response);
                     newMessage.play();
 
                 }, complete(){
