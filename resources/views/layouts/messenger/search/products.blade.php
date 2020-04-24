@@ -1,3 +1,6 @@
+@php
+    $products = collect($items['products']);
+@endphp
 <li class="in">
     @if($products->count()>1)
         <button class="btn card-option-move-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
