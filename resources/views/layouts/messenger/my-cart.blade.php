@@ -1,3 +1,6 @@
+@php
+    $items = collect($items['my_cart']);
+@endphp
 @if($items->isNotEmpty())
 <li style='margin-bottom:0px;' class="in">
     <form class="order-form">

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
 use Google\Cloud\Dialogflow\V2\SessionsClient;
 use Google\Cloud\Dialogflow\V2\TextInput;
 use Google\Cloud\Dialogflow\V2\QueryInput;
+use Google\Cloud\Dialogflow\V2\QueryResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -13,6 +13,8 @@ use App\Models\CardOption;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Services\GeolocalizationService;
+
+
 class BotController extends Controller
 {
 	 const BODY_RESPONSE_INTENT='{
@@ -25,61 +27,6 @@ class BotController extends Controller
                       }
                     }';
     //
-	const RESPONSE = '{
-      "fulfillmentText": "This is a text response",
-      "fulfillmentMessages": [
-        {
-          "card": {
-            "title": "card title",
-            "subtitle": "card text",
-            "imageUri": "https://example.com/images/example.png",
-            "buttons": [
-              {
-                "text": "button text",
-                "postback": "https://example.com/path/for/end-user/to/follow"
-              }
-            ]
-          }
-        }
-      ],
-      "source": "example.com",
-      "payload": {
-        "google": {
-          "expectUserResponse": true,
-          "richResponse": {
-            "items": [
-              {
-                "simpleResponse": {
-                  "textToSpeech": "this is a simple response"
-                }
-              }
-            ]
-          }
-        },
-        "facebook": {
-          "text": "Hello, Facebook!"
-        },
-        "slack": {
-          "text": "This is a text response for Slack."
-        }
-      },
-      "outputContexts": [
-        {
-          "name": "projects/project-id/agent/sessions/session-id/contexts/context-name",
-          "lifespanCount": 5,
-          "parameters": {
-            "param-name": "param-value"
-          }
-        }
-      ],
-      "followupEventInput": {
-        "name": "event name",
-        "languageCode": "en-US",
-        "parameters": {
-          "param-name": "param-value"
-        }
-      }
-    }';
     var $suggest=false;
     const INPUT_UNKNOWN='input.unknown';
     const INPUT_SCHEDULE='input.schedule';
@@ -91,7 +38,7 @@ class BotController extends Controller
     ];
 
     public function processResponse(Request $request){
-	
+
         $access = ['credentials'=>'secret-client.json'];
         $sessionsClient = new SessionsClient($access);
 
@@ -106,16 +53,28 @@ class BotController extends Controller
 
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
+
         $queryResult = $this->detectSuggest($queryResult);
-		
-		
-        return response()->json([
-            'requestText'=>$queryResult->getQueryText(),
-            'responseText'=>$queryResult->getFulfillmentText(),
-            'loadSuggest'=>$this->suggest,
-            'parameters'=>$queryResult->getOriginalParameters()
-        ]);
+
+        $items = '[]';
+        if($queryResult->getWebhookPayload()){
+            if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
+                $items = $queryResult
+                    ->getWebhookPayload()
+                    ->getFields()
+                    ->offsetGet('items')
+                    ->serializeToJsonString()
+                ;
+            }
+        }
+
+        $items = json_decode($items,true);
+
+        $message = $queryResult->getFulfillmentText();
+
+        return view('layouts.messenger.response',compact('items','message'));
     }
+
     private function detectUnknow(QueryResult $queryResult){
         if(in_array($queryResult->getAction(),SELF::DETECT_SUGGEST)){
             $intends = Cache::get(session()->getId()) + 1;
@@ -170,7 +129,6 @@ class BotController extends Controller
         if($request->has('card') && $request->card!='false'){
             $card = $request->card;
             $cardOption  = CardOption::with('items')->where('name',$card)->first();
-
             return view('layouts.card-option.card-option',compact('cardOption'));
         }
         return view('layouts.card-option.card-option');
@@ -197,13 +155,13 @@ class BotController extends Controller
     }
 
     public function webhook(Request $request){
-		
+
 		$payload = $request->all();
 		$queryResult = $payload['queryResult'];
 		$fulfillmentText     = $queryResult["fulfillmentText"] ?? '';
 		$fulfillmentMessages = $queryResult["fulfillmentMessages"] ?? '';
-		
-		
+
+
 		$params = $queryResult['parameters'];
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
 			$product 	= $params['product'];
@@ -215,7 +173,7 @@ class BotController extends Controller
 				});
 			}
 			$products = $products->get();
-			
+
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
 			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;
 			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
@@ -223,10 +181,10 @@ class BotController extends Controller
 			$body->fulfillmentText		= $fulfillmentText;
 			$body->fulfillmentMessages	= $fulfillmentMessages;
 			$body->payload->items= ['products'=>$products];
-			
+
 			return response()->json($body);
 		}else if($queryResult['action'] == self::INPUT_MY_CART){
-			
+
 			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
 			$items = CartItem::where('user_id',auth()->id())
 							->active()
@@ -237,6 +195,6 @@ class BotController extends Controller
 			$body->payload->items= ['my_cart'=>$items];
 			return response()->json($body);
 		}
-		
+
     }
 }
