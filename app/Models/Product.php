@@ -15,7 +15,7 @@ class Product extends  Entity
     protected $primaryKey='id';
     protected $table='products';
     protected $guarded=['id'];
-    protected $appends=['price_with_discount','with_discount','human_date_publication'];
+    protected $appends=['price_with_discount','with_discount','human_date_publication','short_name'];
     protected $colsName=[
                 'name',
                 'description',

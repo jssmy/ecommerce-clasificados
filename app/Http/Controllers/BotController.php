@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
 use Google\Cloud\Dialogflow\V2\SessionsClient;
 use Google\Cloud\Dialogflow\V2\TextInput;
 use Google\Cloud\Dialogflow\V2\QueryInput;
-use Google\Cloud\Dialogflow\V2\QueryResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -25,6 +25,61 @@ class BotController extends Controller
                       }
                     }';
     //
+	const RESPONSE = '{
+      "fulfillmentText": "This is a text response",
+      "fulfillmentMessages": [
+        {
+          "card": {
+            "title": "card title",
+            "subtitle": "card text",
+            "imageUri": "https://example.com/images/example.png",
+            "buttons": [
+              {
+                "text": "button text",
+                "postback": "https://example.com/path/for/end-user/to/follow"
+              }
+            ]
+          }
+        }
+      ],
+      "source": "example.com",
+      "payload": {
+        "google": {
+          "expectUserResponse": true,
+          "richResponse": {
+            "items": [
+              {
+                "simpleResponse": {
+                  "textToSpeech": "this is a simple response"
+                }
+              }
+            ]
+          }
+        },
+        "facebook": {
+          "text": "Hello, Facebook!"
+        },
+        "slack": {
+          "text": "This is a text response for Slack."
+        }
+      },
+      "outputContexts": [
+        {
+          "name": "projects/project-id/agent/sessions/session-id/contexts/context-name",
+          "lifespanCount": 5,
+          "parameters": {
+            "param-name": "param-value"
+          }
+        }
+      ],
+      "followupEventInput": {
+        "name": "event name",
+        "languageCode": "en-US",
+        "parameters": {
+          "param-name": "param-value"
+        }
+      }
+    }';
     var $suggest=false;
     const INPUT_UNKNOWN='input.unknown';
     const INPUT_SCHEDULE='input.schedule';
@@ -36,8 +91,8 @@ class BotController extends Controller
     ];
 
     public function processResponse(Request $request){
+	
         $access = ['credentials'=>'secret-client.json'];
-
         $sessionsClient = new SessionsClient($access);
 
         $session = $sessionsClient->sessionName(env('BOT_PROJECT_ID','ecommerce-bot-mamdbv'),rand(1000,33311212));
@@ -52,8 +107,8 @@ class BotController extends Controller
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
         $queryResult = $this->detectSuggest($queryResult);
-
-
+		
+		
         return response()->json([
             'requestText'=>$queryResult->getQueryText(),
             'responseText'=>$queryResult->getFulfillmentText(),
@@ -142,16 +197,17 @@ class BotController extends Controller
     }
 
     public function webhook(Request $request){
+		
 		$payload = $request->all();
 		$queryResult = $payload['queryResult'];
+		$fulfillmentText     = $queryResult["fulfillmentText"] ?? '';
+		$fulfillmentMessages = $queryResult["fulfillmentMessages"] ?? '';
+		
+		
+		$params = $queryResult['parameters'];
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
-			$params = $queryResult['parameters'];
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
-			$fulfillmentText     = isset($queryResult["fulfillmentText"])?$queryResult["fulfillmentText"]:"";
-			$fulfillmentMessages = $queryResult["fulfillmentMessages"];
-			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
-
 			$products = Product::whereRaw('1=1');
 			foreach($product as $value){
 				$products = $products->where(function($query) use ($value){
@@ -160,14 +216,27 @@ class BotController extends Controller
 			}
 			$products = $products->get();
 			
-			$fulfillmentText = empty($fulfillmentText)?'Esto es lo que estás buscando':$fulfillmentText;
-			$fulfillmentText = $products->isEmpty()?"Lo siento, no he encontrado ningún producto con estas características":$fulfillmentText;
+			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
+			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;
+			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
 			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
-			$body->fulfillmentText=$fulfillmentText;
-			$body->fulfillmentMessages=$fulfillmentMessages;
-			$body->payload->items= ["data"=>$products];
+			$body->fulfillmentText		= $fulfillmentText;
+			$body->fulfillmentMessages	= $fulfillmentMessages;
+			$body->payload->items= ['products'=>$products];
+			
 			return response()->json($body);
-
+		}else if($queryResult['action'] == self::INPUT_MY_CART){
+			
+			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
+			$items = CartItem::where('user_id',auth()->id())
+							->active()
+							->with('product')
+							->get();
+			$body->fulfillmentText		= $fulfillmentText;
+			$body->fulfillmentMessages	= $fulfillmentMessages;
+			$body->payload->items= ['my_cart'=>$items];
+			return response()->json($body);
 		}
+		
     }
 }
