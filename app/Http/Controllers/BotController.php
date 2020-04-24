@@ -38,8 +38,8 @@ class BotController extends Controller
     ];
 
     public function processResponse(Request $request){
-        $access = ['credentials'=>'secret-client.json'];
 
+        $access = ['credentials'=>'secret-client.json'];
         $sessionsClient = new SessionsClient($access);
 
         $session = $sessionsClient->sessionName(env('BOT_PROJECT_ID','ecommerce-bot-mamdbv'),rand(1000,33311212));
@@ -155,16 +155,17 @@ class BotController extends Controller
     }
 
     public function webhook(Request $request){
+
 		$payload = $request->all();
 		$queryResult = $payload['queryResult'];
+		$fulfillmentText     = $queryResult["fulfillmentText"] ?? '';
+		$fulfillmentMessages = $queryResult["fulfillmentMessages"] ?? '';
+
+
+		$params = $queryResult['parameters'];
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
-			$params = $queryResult['parameters'];
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
-			$fulfillmentText     = isset($queryResult["fulfillmentText"])?$queryResult["fulfillmentText"]:"";
-			$fulfillmentMessages = $queryResult["fulfillmentMessages"];
-			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
-
 			$products = Product::whereRaw('1=1');
 			foreach($product as $value){
 				$products = $products->where(function($query) use ($value){
@@ -173,14 +174,27 @@ class BotController extends Controller
 			}
 			$products = $products->get();
 
-			$fulfillmentText = empty($fulfillmentText)?'Esto es lo que estás buscando':$fulfillmentText;
-			$fulfillmentText = $products->isEmpty()?"Lo siento, no he encontrado ningún producto con estas características":$fulfillmentText;
+			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
+			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;
+			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
 			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
-			$body->fulfillmentText=$fulfillmentText;
-			$body->fulfillmentMessages=$fulfillmentMessages;
-			$body->payload->items= ["data"=>$products];
-			return response()->json($body);
+			$body->fulfillmentText		= $fulfillmentText;
+			$body->fulfillmentMessages	= $fulfillmentMessages;
+			$body->payload->items= ['products'=>$products];
 
+			return response()->json($body);
+		}else if($queryResult['action'] == self::INPUT_MY_CART){
+
+			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
+			$items = CartItem::where('user_id',auth()->id())
+							->active()
+							->with('product')
+							->get();
+			$body->fulfillmentText		= $fulfillmentText;
+			$body->fulfillmentMessages	= $fulfillmentMessages;
+			$body->payload->items= ['my_cart'=>$items];
+			return response()->json($body);
 		}
+
     }
 }
