@@ -210,6 +210,8 @@ class BotController extends Controller
 			$body->fulfillmentMessages	= $fulfillmentMessages;
 			$body->payload->items= ['my_cart'=>$items];
 			return response()->json($body);
+		} else if($queryResult['action'] == self::INPUT_SCHEDULE) {
+			
 		}
 
     }
