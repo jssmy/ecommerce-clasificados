@@ -68,24 +68,6 @@ class BotController extends Controller
             $queryResult = $response->getQueryResult();
         }
 
-
-
-        /*
-        $parameters = $queryResult->getParameters();
-
-        if($parameters->getFields()->offsetExists('marca')){
-            $paramsArray['marca'] = $parameters->getFields()->offsetGet('marca');
-        }
-
-        if($parameters->getFields()->offsetExists('product')){
-            $paramsArray['product'] = $parameters->getFields()->offsetGet('product');
-        }
-        $paramStruct->setFields($paramsArray);
-
-        $queryResult->setParameters($paramStruct);
-        */
-        //$queryResult = $this->detectSuggest($queryResult);
-        //dd($queryResult->getParameters());
         $items = '[]';
         if($queryResult->getWebhookPayload()){
             if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
@@ -193,6 +175,7 @@ class BotController extends Controller
 
 
 		$params = $queryResult['parameters'];
+
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
@@ -214,9 +197,10 @@ class BotController extends Controller
 
 			return response()->json($body);
 		}else if($queryResult['action'] == self::INPUT_MY_CART){
+			$user_id = $params['number'] ?? 0 ;
 
 			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
-			$items = CartItem::where('user_id',auth()->id())
+			$items = CartItem::where('user_id',$user_id)
 							->active()
 							->with('product')
 							->get();
@@ -229,24 +213,6 @@ class BotController extends Controller
 		}
 
     }
-
-    private function getPayload(): Struct
-    {
-        $data = '{
-                  "fields" : {
-                    "user_id" : {
-                        "stringValue" : "1",
-                        "kind" : "stringValue"
-                    }
-                  }
-        }';
-
-        $payload = new Struct();
-        $payload->mergeFromJsonString($data);
-        return $payload;
-    }
-
-
 
     private  static  function toObject(Array $arr) {
         $obj = new \stdClass();
