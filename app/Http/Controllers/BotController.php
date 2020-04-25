@@ -178,9 +178,11 @@ class BotController extends Controller
 			$products = Product::whereRaw('1=1');
 			foreach($product as $value){
 				$products = $products->where(function($query) use ($value){
-					$query->orWhere('name','like',"% $value %");
+							$query->where('name','like',"%$value%")
+							->orWhere('description','like','%$value%');
 				});
 			}
+			
 			$products = $products->with('item_cart')->get();
 
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
