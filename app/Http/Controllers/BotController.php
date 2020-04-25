@@ -55,7 +55,7 @@ class BotController extends Controller
         $queryResult = $response->getQueryResult();
 
         $queryResult = $this->detectSuggest($queryResult);
-
+		
         $items = '[]';
         if($queryResult->getWebhookPayload()){
             if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
@@ -67,7 +67,7 @@ class BotController extends Controller
                 ;
             }
         }
-
+		
         $items = json_decode($items,true);
 
         $message = $queryResult->getFulfillmentText();
@@ -161,8 +161,9 @@ class BotController extends Controller
 		$fulfillmentText     = $queryResult["fulfillmentText"] ?? '';
 		$fulfillmentMessages = $queryResult["fulfillmentMessages"] ?? '';
 
-
+		
 		$params = $queryResult['parameters'];
+		
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
@@ -184,9 +185,10 @@ class BotController extends Controller
 
 			return response()->json($body);
 		}else if($queryResult['action'] == self::INPUT_MY_CART){
-
+			$user_id = $params['number'] ?? 0 ;
+			
 			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
-			$items = CartItem::where('user_id',auth()->id())
+			$items = CartItem::where('user_id',$user_id)
 							->active()
 							->with('product')
 							->get();
