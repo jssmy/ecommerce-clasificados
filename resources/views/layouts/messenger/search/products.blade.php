@@ -1,5 +1,5 @@
 @php
-    $products = collect($items['products']);
+    $products = collect($items->products]);
 @endphp
 <li class="in">
     @if($products->count()>1)
