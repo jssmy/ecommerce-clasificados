@@ -181,7 +181,7 @@ class BotController extends Controller
 					$query->orWhere('name','like',"% $value %");
 				});
 			}
-			$products = $products->get();
+			$products = $products->with('item_cart')->get();
 
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
 			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;

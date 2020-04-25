@@ -19,6 +19,5 @@
 		</div>
 		<div style='margint-top:5px;'>{{$item->product->short_name}}</div>
 	</div>
-
 </div>
 
