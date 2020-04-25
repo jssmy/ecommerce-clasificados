@@ -210,6 +210,7 @@ class BotController extends Controller
             $body->fulfillmentText		= $fulfillmentText;
             $body->fulfillmentMessages	= $fulfillmentMessages;
             $body->payload->items= ['schedule'=>$cardOption];
+			return response()->json($body);
         }
 
     }
