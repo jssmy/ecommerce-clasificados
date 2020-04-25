@@ -6,6 +6,9 @@ use Google\Cloud\Dialogflow\V2\SessionsClient;
 use Google\Cloud\Dialogflow\V2\TextInput;
 use Google\Cloud\Dialogflow\V2\QueryInput;
 use Google\Cloud\Dialogflow\V2\QueryResult;
+use Google\Protobuf\Struct;
+use Google\Protobuf\Value;
+use Google\Cloud\Dialogflow\V2\QueryParameters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -26,7 +29,7 @@ class BotController extends Controller
                         }
                       }
                     }';
-	
+
     var $suggest=false;
     const INPUT_UNKNOWN='input.unknown';
     const INPUT_SCHEDULE='input.schedule';
@@ -51,11 +54,20 @@ class BotController extends Controller
         $queryInput = new QueryInput();
         $queryInput->setText($textInput);
 
+
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
+        if($queryResult->getAction()==self::INPUT_MY_CART){
+            $textInput = new TextInput();
+            $textInput->setText($request->requestText.'.usuario '.auth()->id());
+            $textInput->setLanguageCode('es');
 
-        $queryResult = $this->detectSuggest($queryResult);
-		
+            $queryInput = new QueryInput();
+            $queryInput->setText($textInput);
+            $response = $sessionsClient->detectIntent($session, $queryInput);
+            $queryResult = $response->getQueryResult();
+        }
+
         $items = '[]';
         if($queryResult->getWebhookPayload()){
             if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
@@ -67,9 +79,9 @@ class BotController extends Controller
                 ;
             }
         }
-		
-        $items = json_decode($items,true);
 
+        $items = json_decode($items,true);
+        $items = self::toObject($items);
         $message = $queryResult->getFulfillmentText();
 
         return view('layouts.messenger.response',compact('items','message'));
@@ -161,9 +173,9 @@ class BotController extends Controller
 		$fulfillmentText     = $queryResult["fulfillmentText"] ?? '';
 		$fulfillmentMessages = $queryResult["fulfillmentMessages"] ?? '';
 
-		
+
 		$params = $queryResult['parameters'];
-		
+
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
@@ -186,7 +198,7 @@ class BotController extends Controller
 			return response()->json($body);
 		}else if($queryResult['action'] == self::INPUT_MY_CART){
 			$user_id = $params['number'] ?? 0 ;
-			
+
 			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
 			$items = CartItem::where('user_id',$user_id)
 							->active()
@@ -201,4 +213,17 @@ class BotController extends Controller
 		}
 
     }
+
+    private  static  function toObject(Array $arr) {
+        $obj = new \stdClass();
+        foreach($arr as $key=>$val) {
+            if (is_array($val)) {
+                $val = self::toObject($val);
+            }
+            $obj->$key = $val;
+        }
+
+        return $obj;
+    }
+
 }

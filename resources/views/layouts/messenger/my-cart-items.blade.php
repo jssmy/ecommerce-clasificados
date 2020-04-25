@@ -1,14 +1,11 @@
-@php
-$item = (object)$item;
-@endphp
 <div style='' class="card-option-item">
     <div style='min-height: 76%;' class="card-option-item-content">
 			<div class='card-accion'>
-				<button data-action='remove' data-url="{{route('update-cart-quantity',$item)}}"
+				<button data-action='remove' data-url="{{route('update-cart-quantity',$item->id)}}"
 						class='btn btn-remove-product update-cart-quantity'><i class="fa fa-minus" aria-hidden="true"></i>
 				</button>
 				<div class='card-input-quatity'>{{$item->quatity}}</div>
-				<button data-action='add' data-url="{{route('update-cart-quantity',$item)}}"
+				<button data-action='add' data-url="{{route('update-cart-quantity',$item->id)}}"
 						class='btn btn-plus-product update-cart-quantity'><i class="fa fa-plus" aria-hidden="true"></i>
 				</button>
 			 </div>
@@ -20,7 +17,7 @@ $item = (object)$item;
 		<div >
 			s/. {{$item->product->price_with_discount}}
 		</div>
-		<div style='margint-top:5px;'>{{$item->product->shortName}}</div>
+		<div style='margint-top:5px;'>{{$item->product->short_name}}</div>
 	</div>
 
 </div>
