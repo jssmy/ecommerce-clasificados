@@ -74,4 +74,8 @@ class Product extends  Entity
     {
         return strlen($this->name) > SELF::MAX_LONG_NAME ?  substr($this->name,0,SELF::MAX_LONG_NAME) : $this->name; ;
     }
+
+    public  function item_cart(){
+	    return $this->belongsTo(Product::class,'product_id','id');
+    }
 }
