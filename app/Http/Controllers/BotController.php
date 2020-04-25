@@ -78,7 +78,6 @@ class BotController extends Controller
 
         $items = json_decode($items,true);
         $items = self::toObject($items);
-
         $message = $queryResult->getFulfillmentText();
 
         return view('layouts.messenger.response',compact('items','message'));
@@ -211,7 +210,7 @@ class BotController extends Controller
             $body->fulfillmentText		= $fulfillmentText;
             $body->fulfillmentMessages	= $fulfillmentMessages;
             $body->payload->items= ['schedule'=>$cardOption];
-
+			return response()->json($body);
         }
 
     }
