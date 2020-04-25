@@ -76,6 +76,6 @@ class Product extends  Entity
     }
 
     public  function item_cart(){
-	    return $this->belongsTo(Product::class,'product_id','id');
+	    return $this->belongsTo(CartItem::class,'id','product_id');
     }
 }

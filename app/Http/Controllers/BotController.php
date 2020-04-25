@@ -44,15 +44,15 @@ class BotController extends Controller
         $session = $sessionsClient->sessionName(env('BOT_PROJECT_ID','ecommerce-bot-mamdbv'),rand(1000,33311212));
 
         $textInput = new TextInput();
-        $textInput->setText($request->requestText);
+        $textInput->setText($request->requestText.'. usuario'.auth()->id());
         $textInput->setLanguageCode('es');
 
         $queryInput = new QueryInput();
         $queryInput->setText($textInput);
 
-
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
+        /*
         if($queryResult->getAction()==self::INPUT_MY_CART){
             $textInput = new TextInput();
             $textInput->setText($request->requestText.'.usuario '.auth()->id());
@@ -63,7 +63,7 @@ class BotController extends Controller
             $response = $sessionsClient->detectIntent($session, $queryInput);
             $queryResult = $response->getQueryResult();
         }
-
+        */
         $items = '[]';
         if($queryResult->getWebhookPayload()){
             if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
@@ -175,15 +175,18 @@ class BotController extends Controller
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
+			$user_id    = $params['numb'] ?? 0;
 			$products = Product::whereRaw('1=1');
 			foreach($product as $value){
-				$products = $products->where(function($query) use ($value){
-							$query->where('name','like',"%$value%")
-							->orWhere('description','like','%$value%');
-				});
+                $products = $products->where(function($query) use ($value){
+                    $query->where('name','like',"%$value%")
+                        ->orWhere('description','like','%$value%');
+                });
 			}
-			
-			$products = $products->with('item_cart')->get();
+
+			$products = $products->with(['item_cart'=>function($query) use ($user_id){
+			                    $query->where('user_id',$user_id)->active();
+                            }])->get();
 
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
 			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;

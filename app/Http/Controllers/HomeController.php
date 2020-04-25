@@ -27,8 +27,13 @@ class HomeController extends Controller
             return view('home.partials.content');
         }
         if($request->buscar){
-            $products = Product::where('description','like',"%$request->buscar%")
-                        ->orWhere('name','like',"%$request->buscar%")->paginate(12);
+            $products = Product::with(['item_cart'=>function($query){
+                            $query->where('user_id',auth()->id())->active();
+                        }])
+                        ->where('description','like',"%$request->buscar%")
+                        ->orWhere('name','like',"%$request->buscar%")
+                        ->paginate(12);
+
             session()->put('results',$products->total());
             return view('home.search',compact('products'));
         }
