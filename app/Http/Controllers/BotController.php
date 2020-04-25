@@ -5,10 +5,6 @@ namespace App\Http\Controllers;
 use Google\Cloud\Dialogflow\V2\SessionsClient;
 use Google\Cloud\Dialogflow\V2\TextInput;
 use Google\Cloud\Dialogflow\V2\QueryInput;
-use Google\Cloud\Dialogflow\V2\QueryResult;
-use Google\Protobuf\Struct;
-use Google\Protobuf\Value;
-use Google\Cloud\Dialogflow\V2\QueryParameters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -171,8 +167,8 @@ class BotController extends Controller
 		$payload = $request->all();
 		$queryResult = $payload['queryResult'];
 		$fulfillmentText     = $queryResult["fulfillmentText"] ?? '';
-		$fulfillmentMessages = $queryResult["fulfillmentMessages"] ?? '';
-
+        $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
+        $body = json_decode(SELF::BODY_RESPONSE_INTENT);
 
 		$params = $queryResult['parameters'];
 
@@ -190,7 +186,6 @@ class BotController extends Controller
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
 			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;
 			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
-			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
 			$body->fulfillmentText		= $fulfillmentText;
 			$body->fulfillmentMessages	= $fulfillmentMessages;
 			$body->payload->items= ['products'=>$products];
@@ -199,7 +194,7 @@ class BotController extends Controller
 		}else if($queryResult['action'] == self::INPUT_MY_CART){
 			$user_id = $params['number'] ?? 0 ;
 
-			$body = json_decode(SELF::BODY_RESPONSE_INTENT);
+
 			$items = CartItem::where('user_id',$user_id)
 							->active()
 							->with('product')
@@ -210,9 +205,12 @@ class BotController extends Controller
 			$body->fulfillmentMessages	= $fulfillmentMessages;
 			$body->payload->items= ['my_cart'=>$items];
 			return response()->json($body);
-		} else if($queryResult['action'] == self::INPUT_SCHEDULE) {
-			
-		}
+		} else if($queryResult['action'] == self::INPUT_SCHEDULE){
+            $cardOption  = CardOption::with('items')->where('name',self::INPUT_SCHEDULE)->first();
+            $body->fulfillmentText		= $fulfillmentText;
+            $body->fulfillmentMessages	= $fulfillmentMessages;
+            $body->payload->items= ['schedule'=>$cardOption];
+        }
 
     }
 
