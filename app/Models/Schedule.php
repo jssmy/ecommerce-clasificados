@@ -9,7 +9,7 @@ class Schedule extends Model
     //
     protected $guarded=['id'];
     protected $table='schedule';
-
+    protected $appends = ['start','end'];
     public function getstartAttribute()
     {
         return Carbon::parse($this->getOriginal('start'))->format('h:m a');

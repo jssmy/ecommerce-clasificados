@@ -13,3 +13,5 @@
 </li>
 @includeWhen(isset($items->products),'layouts.messenger.search.products',['items'=>$items])
 @includeWhen(isset($items->my_cart),'layouts.messenger.my-cart',['items'=>$items])
+@includeWhen(isset($items->schedule),'layouts.card-option.card-option',['cardOption'=>$items])
+
