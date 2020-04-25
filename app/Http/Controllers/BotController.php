@@ -44,15 +44,15 @@ class BotController extends Controller
         $session = $sessionsClient->sessionName(env('BOT_PROJECT_ID','ecommerce-bot-mamdbv'),rand(1000,33311212));
 
         $textInput = new TextInput();
-        $textInput->setText($request->requestText);
+        $textInput->setText($request->requestText.'. usuario'.auth()->id());
         $textInput->setLanguageCode('es');
 
         $queryInput = new QueryInput();
         $queryInput->setText($textInput);
 
-
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
+        /*
         if($queryResult->getAction()==self::INPUT_MY_CART){
             $textInput = new TextInput();
             $textInput->setText($request->requestText.'.usuario '.auth()->id());
@@ -63,7 +63,7 @@ class BotController extends Controller
             $response = $sessionsClient->detectIntent($session, $queryInput);
             $queryResult = $response->getQueryResult();
         }
-
+        */
         $items = '[]';
         if($queryResult->getWebhookPayload()){
             if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
