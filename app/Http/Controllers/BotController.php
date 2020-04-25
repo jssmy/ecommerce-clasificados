@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\File;
 use App\Models\CardOption;
 use App\Models\CartItem;
 use App\Models\Product;
-use App\Models\Schedule;
 use App\Services\GeolocalizationService;
 
 
