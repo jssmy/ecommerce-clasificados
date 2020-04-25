@@ -175,13 +175,18 @@ class BotController extends Controller
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
+			$user_id    = $params['numb'] ?? 0;
 			$products = Product::whereRaw('1=1');
 			foreach($product as $value){
-				$products = $products->where(function($query) use ($value){
-					$query->orWhere('name','like',"% $value %");
-				});
+                $products = $products->where(function($query) use ($value){
+                    $query->where('name','like',"%$value%")
+                        ->orWhere('description','like','%$value%');
+                });
 			}
-			$products = $products->with('item_cart')->get();
+
+			$products = $products->with(['item_cart'=>function($query) use ($user_id){
+			                    $query->where('user_id',$user_id)->active();
+                            }])->get();
 
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
 			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;
