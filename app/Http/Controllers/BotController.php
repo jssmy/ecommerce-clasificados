@@ -182,7 +182,7 @@ class BotController extends Controller
 			$products = Product::where('is_promotion',$is_promotion);
 			//$products = Product::whereRaw('1=1');
 				if($product){
-                	$products = $products->where('description','like',"%$product%");
+                	$products = $products->where('name','like',"%$product%");
 				}
 
 				if($marca) {
