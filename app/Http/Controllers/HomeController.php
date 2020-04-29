@@ -45,7 +45,7 @@ class HomeController extends Controller
         $sitioweb = $this->curl('https://www.olx.com.pe/api/relevance/search?category=832&facet_limit=100&location=1000001&location_facet_limit=20&page=4&user=17133e8fb77x5679657b');  // Ejecuta la función curl escrapeando el sitio web https://devcode.la and regresa el valor a la variable $sitioweb
         $response  = json_decode($sitioweb);
         $products = $response->data;
-
+        dd($products);
         foreach ($products as $product) {
             $item = [
                 'name' => $product->title,

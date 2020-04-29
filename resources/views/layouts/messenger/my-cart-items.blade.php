@@ -10,7 +10,7 @@
 				</button>
 			 </div>
 			<div>
-				<img style='width:100px; max-width:215px' src="{{URL::asset($item->product->img_url_1)}}">
+				<img style='width:100px; max-width:215px; max-height: 100px' src="{{URL::asset($item->product->img_url_1)}}">
 			</div>
 	</div>
 	<div style='cursor:auto; flex-direction: column; margin-top:0px;font-weight: 500; font-size:10px' class="card-option-item-footer">

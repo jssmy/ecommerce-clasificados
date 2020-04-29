@@ -31,6 +31,7 @@ class BotController extends Controller
     const INPUT_SCHEDULE='input.schedule';
 	const INPUT_MY_CART='input.my_cart';
 	const INPUT_SEARCH_PRODUCTS ='input.search';
+	const INPUT_SEARCH_PROMOTIONS='input.search_promotions';
     const MAX_INPUT_UNKNOWN= 3;
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
@@ -172,27 +173,30 @@ class BotController extends Controller
 
 		$params = $queryResult['parameters'];
 
-		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
+		if(in_array($queryResult['action'],[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PRODUCTS])){
+            $is_promotion = self::INPUT_SEARCH_PROMOTIONS ? 1 : 0;
 			$product 	= $params['product'][0] 	??  null;
 			$marca 		= $params['marca'][0] 		??  null;
 			$user_id    = $params['number'] ?? 0;
-			$products = Product::whereRaw('1=1');
-			
-			$products = $products->where(function($query) use ($product){
-                    		$query->where('name','like',"%$product%")
-                        		->orWhere('description','like',"%$product%");
-						});
-			
+			$products = Product::where('is_promotion',$is_promotion);
+
+			if($product){
+                $products = $products->where(function($query) use ($product){
+                    $query->where('name','like',"%$product%")
+                        ->orWhere('description','like',"%$product%");
+                });
+            }
+            
 			if($marca) {
 				$products = $products->Where('brand','like',"%$marca%");
 			}
-			
+
 			$products = $products->with(['item_cart'=>function($query) use ($user_id){
 			                    $query->where('user_id',$user_id)->active();
                             }])->get();
 
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
-			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;
+			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún resultado con esas características" : $fulfillmentText;
 			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
 			$body->fulfillmentText		= $fulfillmentText;
 			$body->fulfillmentMessages	= $fulfillmentMessages;
