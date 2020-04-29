@@ -173,17 +173,20 @@ class BotController extends Controller
 		$params = $queryResult['parameters'];
 
 		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
-			$product 	= $params['product'];
-			$marca 		= $params['marca'];
-			$user_id    = $params['numb'] ?? 0;
+			$product 	= $params['product'][0] 	??  null;
+			$marca 		= $params['marca'][0] 		??  null;
+			$user_id    = $params['number'] ?? 0;
 			$products = Product::whereRaw('1=1');
-			foreach($product as $value){
-                $products = $products->where(function($query) use ($value){
-                    $query->where('name','like',"%$value%")
-                        ->orWhere('description','like','%$value%');
-                });
+			
+			$products = $products->where(function($query) use ($product){
+                    		$query->where('name','like',"%$product%")
+                        		->orWhere('description','like',"%$product%");
+						});
+			
+			if($marca) {
+				$products = $products->Where('brand','like',"%$marca%");
 			}
-
+			
 			$products = $products->with(['item_cart'=>function($query) use ($user_id){
 			                    $query->where('user_id',$user_id)->active();
                             }])->get();
