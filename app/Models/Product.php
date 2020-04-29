@@ -15,7 +15,12 @@ class Product extends  Entity
     protected $primaryKey='id';
     protected $table='products';
     protected $guarded=['id'];
-    protected $appends=['price_with_discount','with_discount','human_date_publication','short_name'];
+    protected $appends=['price_with_discount',
+                        'with_discount',
+                        'human_date_publication',
+                        'short_name',
+                        'short_description'];
+
     protected $colsName=[
                 'name',
                 'description',
@@ -75,7 +80,15 @@ class Product extends  Entity
         return strlen($this->name) > SELF::MAX_LONG_NAME ?  substr($this->name,0,SELF::MAX_LONG_NAME) : $this->name; ;
     }
 
+    public function getshortDescriptionAttribute()
+    {
+        return strlen($this->description) > SELF::MAX_LONG_NAME ?  substr($this->description,0,SELF::MAX_LONG_NAME) : $this->description; ;
+    }
+
     public  function item_cart(){
 	    return $this->belongsTo(CartItem::class,'id','product_id');
     }
+
+
+
 }

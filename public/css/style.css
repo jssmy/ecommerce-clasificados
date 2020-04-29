@@ -2227,3 +2227,7 @@ textarea.input {
     border-top: 8px solid #000;
 }
 
+.product .product-img {
+    position: relative;
+    height: 250px;
+}
