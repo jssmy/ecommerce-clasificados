@@ -438,6 +438,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
     $(document).ready(function () {
 
 		localStorage.removeItem('lastTime');
+		var search_intention = '';
         var valMessage = 'hola';
         var sendMessage = new Audio("{{URL::asset('/public/notification/sent.mp3')}}");
         var newMessage = new Audio("{{URL::asset('/public/notification/income.mp3')}}");
@@ -527,7 +528,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                     sendMessage.pause();
                 }
                 sendMessage.play();
-                valMessage =$(this).val();
+                valMessage = search_intention +' '+$(this).val();
                 var message = $("#template-out")
                                 .html()
                                 .replace('_content_',valMessage)
@@ -537,6 +538,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 $(this).val('');
                 scrollTop();
                 setTimeout(writing,1000);
+                search_intention='';
             }
         });
 
@@ -601,6 +603,16 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
             $('.chat-list').html(localStorage.getItem('dialog'));
             $('.btn-expand').trigger('click');
         }
+
+        $(document).on('click','.search_product_intent',function () {
+            search_intention ='buscar';
+        });
+
+        $(document).on('click','.search_promotion_intent',function () {
+
+            search_intention ='promociones';
+        });
+
     });
 
 
