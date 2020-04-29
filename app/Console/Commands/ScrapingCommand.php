@@ -40,7 +40,7 @@ class ScrapingCommand extends Command
         //
         $enabled=true;
         for($i=0; $i<100; $i++){
-            dump($i);
+
             $sitioweb = $this->curl("https://www.olx.com.pe/api/relevance/search?category=832&facet_limit=100&location=1000001&location_facet_limit=20&page=$i&user=17133e8fb77x5679657b");
             $response  = json_decode($sitioweb);
 
@@ -56,11 +56,13 @@ class ScrapingCommand extends Command
                     'discount' => 0,
                     'stock' => $product->revision,
                     'category_id' => '1',
+                    'brand'=>'INKA KOLA'
                 ];
                 foreach ($product->images as $index => $image) {
                     if($index>6) break;
                     $item["img_url_" . ($index + 1)] = $image->url;
                 }
+                dump($item);
                 Product::create($item);
             }
         }

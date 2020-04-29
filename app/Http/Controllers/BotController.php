@@ -31,6 +31,7 @@ class BotController extends Controller
     const INPUT_SCHEDULE='input.schedule';
 	const INPUT_MY_CART='input.my_cart';
 	const INPUT_SEARCH_PRODUCTS ='input.search';
+	const INPUT_SEARCH_PROMOTIONS='input.search_promotions';
     const MAX_INPUT_UNKNOWN= 3;
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
@@ -172,11 +173,12 @@ class BotController extends Controller
 
 		$params = $queryResult['parameters'];
 
-		if($queryResult['action'] == self::INPUT_SEARCH_PRODUCTS){
+		if(ina_array($queryResult['action'] ,[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS])){
+		    $is_promotion = self::INPUT_SEARCH_PROMOTIONS ? 1 : 0;
 			$product 	= $params['product'];
 			$marca 		= $params['marca'];
 			$user_id    = $params['numb'] ?? 0;
-			$products = Product::whereRaw('1=1');
+			$products = Product::where('is_promotion',$is_promotion);
 			foreach($product as $value){
                 $products = $products->where(function($query) use ($value){
                     $query->where('name','like',"%$value%")
@@ -189,7 +191,7 @@ class BotController extends Controller
                             }])->get();
 
 			$fulfillmentText = $fulfillmentText ? 'Esto es lo que estás buscando' : $fulfillmentText;
-			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún producto con estas características" : $fulfillmentText;
+			$fulfillmentText = $products->isEmpty() ? "Lo siento, no he encontrado ningún resultado con esas características" : $fulfillmentText;
 			$fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
 			$body->fulfillmentText		= $fulfillmentText;
 			$body->fulfillmentMessages	= $fulfillmentMessages;

@@ -216,7 +216,11 @@ $(document).ready(function () {
 			$('.update-cart-quantity').attr('disabled',true);
 		}, complete: function(){
 			$('.update-cart-quantity').removeAttr('disabled');
-		}
+		}, error: function (err) {
+            if(err.status==401){
+                $("#btn-login-account").click();
+            }
+        }
 	});
 
  	})

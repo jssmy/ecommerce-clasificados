@@ -436,6 +436,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 <script>
 
     $(document).ready(function () {
+
 		localStorage.removeItem('lastTime');
         var valMessage = 'hola';
         var sendMessage = new Audio("{{URL::asset('/public/notification/sent.mp3')}}");
@@ -453,6 +454,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
             if($('.card-option-conent').length && !card) return;
             $.get(defaultCardOption+'?card='+card,function (view) {
                 $('.chat-list').append(view);
+                localStorage.setItem('dialog',$('.chat-list').html());
                 scrollTop();
 				newMessage.play();
             });
@@ -501,6 +503,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                     $('.chat-list').append(recivedMessage);
                     */
                     $('.chat-list').append(response);
+                    localStorage.setItem('dialog',$('.chat-list').html());
                     newMessage.play();
 
                 }, complete(){
@@ -530,16 +533,15 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                                 .replace('_content_',valMessage)
 								.replace('_time_',formatedTime);
                 $('.chat-list').append(message);
+                localStorage.setItem('dialog',$('.chat-list').html());
                 $(this).val('');
                 scrollTop();
-
                 setTimeout(writing,1000);
             }
         });
 
 
         $('.btn-expand').click(function () {
-
             if($('.card').hasClass('card-expanded')){
                 $(".card").removeClass('card-expanded');
                 scrollTop();
@@ -594,6 +596,11 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
 				 }
 			}
 		},1000);
+
+        if(localStorage.getItem('dialog')){
+            $('.chat-list').html(localStorage.getItem('dialog'));
+            $('.btn-expand').trigger('click');
+        }
     });
 
 
