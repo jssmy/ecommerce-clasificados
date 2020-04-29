@@ -181,19 +181,6 @@ class BotController extends Controller
 			$user_id    = $params['number'] ?? 0;
 			$products = Product::where('is_promotion',$is_promotion);
 			//$products = Product::whereRaw('1=1');
-			if(!$is_promotion){
-				if($product){
-                $products = $products->where(function($query) use ($product){
-						$query->where('name','like',"%$product%")
-							->orWhere('description','like',"%$product%");
-					});
-				}
-
-				if($marca) {
-					$products = $products->Where('brand','like',"%$marca%");
-				}	
-			}else {
-				
 				if($product){
                 	$products = $products->where('description','like',"%$product%");
 				}
@@ -201,7 +188,7 @@ class BotController extends Controller
 				if($marca) {
 					$products = $products->Where('description','like',"%$marca%");
 				}
-			}
+			
 			$products = $products->with(['item_cart'=>function($query) use ($user_id){
 			                    $query->where('user_id',$user_id)->active();
                             }])->get();
