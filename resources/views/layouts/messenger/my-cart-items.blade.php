@@ -17,7 +17,7 @@
 		<div >
 			s/. {{$item->product->price_with_discount}}
 		</div>
-		<div style='margint-top:5px;'>{{$item->product->short_name}}</div>
+		<div style='margint-top:5px;'>{{$item->product->short_description}}</div>
 	</div>
 </div>
 
