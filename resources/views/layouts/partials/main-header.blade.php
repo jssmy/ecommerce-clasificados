@@ -2,11 +2,13 @@
     <!-- TOP HEADER -->
     <div id="top-header">
         <div class="container">
+			<!---
             <ul class="header-links pull-left">
                 <li><a href="#"><i class="fa fa-phone"></i> {{config('app.phone')}}</a></li>
                 <li><a href="#"><i class="fa fa-envelope-o"></i> {{config('app.email')}}</a></li>
                 <li><a href="#"><i class="fa fa-map-marker"></i> {{config('app.addres')}}</a></li>
             </ul>
+			--->
             <ul class="header-links pull-right">
                 <li>
                     @if(auth()->check())
@@ -23,7 +25,8 @@
                                 <div class="cart-btns">
                                     <a style="width: 100% !important;" class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+												localStorage.removeItem('dialog');
+												document.getElementById('logout-form').submit();">
                                         CERRAR SESIÓN
                                         <i class="fa fa-sign-out fa-1x" aria-hidden="true"></i>
                                     </a>

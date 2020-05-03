@@ -45,7 +45,7 @@ class BotController extends Controller
         $session = $sessionsClient->sessionName(env('BOT_PROJECT_ID','ecommerce-bot-mamdbv'),rand(1000,33311212));
 
         $textInput = new TextInput();
-        $textInput->setText($request->requestText.'. usuario'.auth()->id());
+        $textInput->setText($request->requestText);
         $textInput->setLanguageCode('es');
 
         $queryInput = new QueryInput();
@@ -53,8 +53,8 @@ class BotController extends Controller
 
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
-        /*
-        if($queryResult->getAction()==self::INPUT_MY_CART){
+        
+        if(in_array($queryResult->getAction(),[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS,self::INPUT_MY_CART])){
             $textInput = new TextInput();
             $textInput->setText($request->requestText.'.usuario '.auth()->id());
             $textInput->setLanguageCode('es');
@@ -64,7 +64,7 @@ class BotController extends Controller
             $response = $sessionsClient->detectIntent($session, $queryInput);
             $queryResult = $response->getQueryResult();
         }
-        */
+        
         $items = '[]';
         if($queryResult->getWebhookPayload()){
             if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
@@ -180,7 +180,7 @@ class BotController extends Controller
 			
 			$user_id    = $params['number'] ?? 0;
 			$products = Product::where('is_promotion',$is_promotion);
-			//$products = Product::whereRaw('1=1');
+
 				if($product){
                 	$products = $products->where('name','like',"%$product%");
 				}
@@ -202,9 +202,9 @@ class BotController extends Controller
 
 			return response()->json($body);
 		}else if($queryResult['action'] == self::INPUT_MY_CART){
+			
 			$user_id = $params['number'] ?? 0 ;
-
-
+			
 			$items = CartItem::where('user_id',$user_id)
 							->active()
 							->with('product')
@@ -216,7 +216,9 @@ class BotController extends Controller
 			$body->payload->items= ['my_cart'=>$items];
 			return response()->json($body);
 		} else if($queryResult['action'] == self::INPUT_SCHEDULE){
-            $cardOption  = CardOption::with('items')->where('name',self::INPUT_SCHEDULE)->first();
+            $cardOption  = CardOption::with('items')
+										->where('name',self::INPUT_SCHEDULE)
+										->first();
             $body->fulfillmentText		= $fulfillmentText;
             $body->fulfillmentMessages	= $fulfillmentMessages;
             $body->payload->items= ['schedule'=>$cardOption];
