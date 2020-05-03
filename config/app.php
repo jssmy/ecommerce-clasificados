@@ -23,7 +23,7 @@ return [
     'phone'=>'968122367',
     'email'=>'serviorlogico@gmail.com',
     'addres'=>'Urb. Santanita, Lima',
-    'bot'=>env('APP_BOT_NAME','jssmy'),
+    'bot'=>env('APP_BOT_NAME','Chatbot'),
 
     /*
     |--------------------------------------------------------------------------
