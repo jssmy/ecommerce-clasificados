@@ -12,7 +12,7 @@ use App\Models\CardOption;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Services\GeolocalizationService;
-
+use App\Services\CacheService;
 
 class BotController extends Controller
 {
@@ -33,6 +33,7 @@ class BotController extends Controller
 	const INPUT_SEARCH_PRODUCTS ='input.search';
 	const INPUT_SEARCH_PROMOTIONS='input.search_promotions';
     const MAX_INPUT_UNKNOWN= 3;
+    const INPUT_RECOMMENDED='input.recommended';
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
     ];
@@ -53,8 +54,8 @@ class BotController extends Controller
 
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
-        
-        if(in_array($queryResult->getAction(),[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS,self::INPUT_MY_CART])){
+
+        if(in_array($queryResult->getAction(),[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS,self::INPUT_MY_CART,self::INPUT_RECOMMENDED])){
             $textInput = new TextInput();
             $textInput->setText($request->requestText.'.usuario '.auth()->id());
             $textInput->setLanguageCode('es');
@@ -64,7 +65,7 @@ class BotController extends Controller
             $response = $sessionsClient->detectIntent($session, $queryInput);
             $queryResult = $response->getQueryResult();
         }
-        
+
         $items = '[]';
         if($queryResult->getWebhookPayload()){
             if($queryResult->getWebhookPayload()->getFields()->offsetExists('items')){
@@ -144,10 +145,20 @@ class BotController extends Controller
     }
 
 	public function loadMyCard(){
-		$items = CartItem::where('user_id',auth()->id())->active()->with('product')->get();
+		$items = CartItem::where('user_id',auth()->id())
+                ->active()
+                ->with('product')
+                ->get();
 		return view('layouts.messenger.my-cart',compact('items'));
 
 	}
+
+	public function loadSummaryInformation(){
+        $items = CartItem::where('user_id',auth()->id())
+            ->active()
+            ->get();
+        return response()->json(['items'=>$items,'total'=>$items->sum('price_with_discount')]);
+    }
 
 	public function search(Request $request){
 		if($request->buscar){
@@ -172,12 +183,12 @@ class BotController extends Controller
         $body = json_decode(SELF::BODY_RESPONSE_INTENT);
 
 		$params = $queryResult['parameters'];
-		
-		if(in_array($queryResult['action'],[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS])){
+
+		if(in_array($queryResult['action'],[self::loadMyCard,self::INPUT_SEARCH_PROMOTIONS])){
             $is_promotion = $queryResult['action'] ==self::INPUT_SEARCH_PROMOTIONS ? 1 : 0;
 			$product 	= $params['product'][0] 	??  null;
 			$marca 		= $params['marca'][0] 		??  null;
-			
+
 			$user_id    = $params['number'] ?? 0;
 			$products = Product::where('is_promotion',$is_promotion);
 
@@ -188,7 +199,7 @@ class BotController extends Controller
 				if($marca) {
 					$products = $products->Where('description','like',"%$marca%");
 				}
-			
+
 			$products = $products->with(['item_cart'=>function($query) use ($user_id){
 			                    $query->where('user_id',$user_id)->active();
                             }])->get();
@@ -202,9 +213,9 @@ class BotController extends Controller
 
 			return response()->json($body);
 		}else if($queryResult['action'] == self::INPUT_MY_CART){
-			
+
 			$user_id = $params['number'] ?? 0 ;
-			
+
 			$items = CartItem::where('user_id',$user_id)
 							->active()
 							->with('product')
@@ -223,6 +234,15 @@ class BotController extends Controller
             $body->fulfillmentMessages	= $fulfillmentMessages;
             $body->payload->items= ['schedule'=>$cardOption];
 			return response()->json($body);
+        } else if($queryResult['action']== self::INPUT_RECOMMENDED) {
+            $products = CacheService::recommended($user_id);
+
+            $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
+            $body->fulfillmentText		= $fulfillmentText;
+            $body->fulfillmentMessages	= $fulfillmentMessages;
+            $body->payload->items= ['products'=>$products];
+
+            return response()->json($body);
         }
 
     }

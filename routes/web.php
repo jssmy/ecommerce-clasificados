@@ -33,6 +33,7 @@ Route::group(['prefix'=>'messenger'],function (){
     Route::get('bot','BotController@processResponse')->name('bot.request');
     Route::get('defaut-card-option','BotController@loadDeaultCard')->name('bot.default-card');
 	Route::get('load-my-cart','BotController@loadMyCard')->name('bot.load-my-cart');
+    Route::get('load-summary-information','BotController@loadSummaryInformation')->name('bot.load-summary-information');
 	Route::get('sarch','BotController@search')->name('bot.search-products');
 });
 

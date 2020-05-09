@@ -119,6 +119,10 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
     .in , out{
         justify-content: center;
     }
+    .in .order-form .list-product {
+        justify-content: center;
+    }
+
     .chat-list .in .chat-message {
         border-radius: 10px;
         border-bottom-left-radius: 0px;
@@ -169,7 +173,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         height: 15%;
         padding-top: 10px;
         padding-right: 20px;
-        padding-left: 20px;
+        padding-left: 20pfcardx;
     }
     .card-footer input{
         border-radius: 15px;
@@ -204,7 +208,7 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
     }
     .card-option{
         min-height: 160px;
-        width: 100%;
+        width: 265px;
         display: flex;
         padding: 0px;
     }

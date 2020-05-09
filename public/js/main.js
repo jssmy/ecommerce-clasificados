@@ -233,6 +233,7 @@ $(document).ready(function () {
 
         /* validar inputs */
 		var form  = $(this).parent().prev().find('.order-form');
+
 		if(form){
             form.validate({
                 errorPlacement: function () {}
@@ -241,7 +242,8 @@ $(document).ready(function () {
                 return true;
             }
         }
-
+        var inputDir = $(this).parent().prev().find('.input-direction');
+        $('.order-address').html(inputDir.val());
 		/*mostrar next*/
         $('.btn-prev-step').removeClass('hide');
 		if(nextSection.length){
@@ -249,9 +251,23 @@ $(document).ready(function () {
 			currentSection.addClass('hide');
 			nextSection.removeClass('hide');
 			nextSection.addClass('active');
+            /* confirmar compra */
+            if(! nextSection.hasClass('summary')) return true;
+            $('.btn-next-step').attr('disabled',true);
+            $.get($(this).data('url_load_summary_information'),function (response) {
+                $('.order-price').html('S/ '+response.total);
+                $('.order-total').html('S/ '+(response.total + 5));
+                if(response.total<=0){
+                    $('.btn-next-step').attr('disabled',true);
+                    $('.btn-next-step').html('Agregue productos');
+                    return;
+                }
+                $('.btn-next-step').removeAttr('disabled')
+                $('.btn-next-step').html('Continuar compra');
+            });
+
 			return true;
 		}
-		/* confirmar compra */
 
         if(form){
             $.ajax({
@@ -271,6 +287,8 @@ $(document).ready(function () {
                     $('.btn-prev-step').remove();
                     $('.order-code').html(order.code);
                     $('.order-code').parent().removeClass('hide');
+                    $('.btn-end-shopp').removeClass('hide');
+                    window.updateCart();
 
                 }
             });
@@ -284,14 +302,16 @@ $(document).ready(function () {
 		var currentSection = content.find('.active');
 		var prevSection = currentSection.prev();
 
-
+        $('.btn-next-step').removeAttr('disabled');
+        $('.btn-next-step').html('Continuar compra');
 		if(prevSection.length){
 			currentSection.removeClass('active');
 			currentSection.addClass('hide');
 			prevSection.removeClass('hide');
 			prevSection.addClass('active');
-
+			return;
 		}
+
 	});
 
 	 function getLocation() {
