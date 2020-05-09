@@ -184,7 +184,7 @@ class BotController extends Controller
 
 		$params = $queryResult['parameters'];
 
-		if(in_array($queryResult['action'],[self::loadMyCard,self::INPUT_SEARCH_PROMOTIONS])){
+		if(in_array($queryResult['action'],[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS])){
             $is_promotion = $queryResult['action'] ==self::INPUT_SEARCH_PROMOTIONS ? 1 : 0;
 			$product 	= $params['product'][0] 	??  null;
 			$marca 		= $params['marca'][0] 		??  null;
