@@ -32,8 +32,12 @@ class CacheService
     }
     /** get new added products from user profile**/
     public static function authNewProducts($user_id=0){
-        $products = self::recommended($user_id ? : auth()->id());
-        return Product::whereIn('id',$products->pluck('product'))->orderByRaw('rand()')->get();
+        $user_id = $user_id ? : auth()->id();
+        $products = self::recommended($user_id);
+        return Product::whereIn('id',$products->pluck('product'))
+                    ->with(['item_cart'=>function($query) use ($user_id){
+                        $query->where('user_id',$user_id)->active();
+                    }])->orderByRaw('rand()')->get();
 
     }
 
