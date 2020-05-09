@@ -235,6 +235,7 @@ class BotController extends Controller
             $body->payload->items= ['schedule'=>$cardOption];
 			return response()->json($body);
         } else if($queryResult['action']== self::INPUT_RECOMMENDED) {
+            $user_id    = $params['number'] ?? 0;
             $products = CacheService::recommended($user_id);
 
             $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
