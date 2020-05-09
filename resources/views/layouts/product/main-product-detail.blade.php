@@ -9,5 +9,8 @@
         @include('layouts.partials.breadcrumb')
         @include('layouts.product.product-detail')
     </script>
+    <script>
+        var url_updat_lista_cart = "{{route('cart.detail-items')}}" ;
+    </script>
     <script src="{{URL::asset('public/js/home.js')}}"></script>
 @endsection
