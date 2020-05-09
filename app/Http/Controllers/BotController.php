@@ -172,36 +172,22 @@ class BotController extends Controller
         $body = json_decode(SELF::BODY_RESPONSE_INTENT);
 
 		$params = $queryResult['parameters'];
-		
+
 		if(in_array($queryResult['action'],[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS])){
             $is_promotion = $queryResult['action'] ==self::INPUT_SEARCH_PROMOTIONS ? 1 : 0;
 			$product 	= $params['product'][0] 	??  null;
 			$marca 		= $params['marca'][0] 		??  null;
-			
+
 			$user_id    = $params['number'] ?? 0;
 			$products = Product::where('is_promotion',$is_promotion);
 			//$products = Product::whereRaw('1=1');
-			if(!$is_promotion){
-				if($product){
-                $products = $products->where(function($query) use ($product){
-						$query->where('name','like',"%$product%")
-							->orWhere('description','like',"%$product%");
-					});
-				}
+            if($product){
+                $products = $products->where('description','like',"%$product%");
+            }
 
-				if($marca) {
-					$products = $products->Where('brand','like',"%$marca%");
-				}	
-			}else {
-				
-				if($product){
-                	$products = $products->where('description','like',"%$product%");
-				}
-
-				if($marca) {
-					$products = $products->Where('description','like',"%$marca%");
-				}
-			}
+            if($marca) {
+                $products = $products->Where('description','like',"%$marca%");
+            }
 			$products = $products->with(['item_cart'=>function($query) use ($user_id){
 			                    $query->where('user_id',$user_id)->active();
                             }])->get();
