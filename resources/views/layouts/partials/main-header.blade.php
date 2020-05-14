@@ -62,7 +62,7 @@
                             <!--
                             <img src="{{URL::asset('public/img/logo.png')}}" alt="">
                             -->
-                            <h1 style="color: #aeae37">{{config('app.name')}}.com</h1>
+                            <h1 style="color: #D10024">{{config('app.name')}}.com</h1>
                         </a>
                     </div>-
                 </div>

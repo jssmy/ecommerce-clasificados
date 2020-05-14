@@ -39,7 +39,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <button style="background-color: #aeae37; color: white" class="btn btn-block btn-circule">INICIAR SESIÓN</button>
+                <button style="background-color: #fec630; color: #D10024; border-color: #D10024" class="btn btn-block btn-circule">INICIAR SESIÓN</button>
             </div>
         </form>
     </div>
@@ -79,7 +79,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <button style="background-color: #aeae37; color: white" class="btn btn-block btn-circule">CREAR CUENTA</button>
+                <button style="background-color: #fec630; color: #D10024; border-color: #D10024" class="btn btn-block btn-circule">CREAR CUENTA</button>
             </div>
         </form>
     </div>

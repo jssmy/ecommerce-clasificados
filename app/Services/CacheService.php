@@ -37,11 +37,12 @@ class CacheService
         return Product::whereIn('id',$products->pluck('product'))
                     ->with(['item_cart'=>function($query) use ($user_id){
                         $query->where('user_id',$user_id)->active();
-                    }])->orderByRaw('rand()')->get();
+                    }])->orderByRaw('rand()')
+                    ->get();
 
     }
 
-    public static function recommended($user_id ){
+    public static function recommended($user_id ) {
             return Product::leftJoin(ProductInteraction::table().' as i', function ($q) use ($user_id){
                 return $q->on('i.product_id','=',Product::table().'.id')
                     ->where('user_id','=',$user_id);

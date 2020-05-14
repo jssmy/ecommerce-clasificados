@@ -50,6 +50,24 @@
         .error{
             border-color: red;
         }
+        #header {
+            background-color: #fec630!important;
+        }
+        #top-header{
+            background-color: #D10024;
+        }
+        #footer{
+            background-color: #303030;
+        }
+        .product .add-to-cart{
+            background: #D10024;
+        }
+        .product .add-to-cart button{
+            background-color: #fec630!important;
+        }
+        .card .card-header {
+            background: #303030 !important;
+        }
     </style>
 </head>
 <body>
