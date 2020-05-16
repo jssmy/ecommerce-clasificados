@@ -260,7 +260,8 @@ class BotController extends Controller
                             + COS(RADIANS(lng - $longitud)) * COS(RADIANS(lat)) 
                             * COS(RADIANS($latitud))                                )
                             ),2) AS distance")  )->get();
-                    $markets = collect($markets);
+                    $markets = collect($markets)->where('distance','<=',2);
+
             }
             $fulfillmentMessages = $markets->isEmpty() ? 'No se ha podido encontrar tu ubicacion' : $fulfillmentMessages;
             $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;

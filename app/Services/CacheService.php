@@ -50,7 +50,7 @@ class CacheService
             ->orderByRaw('i.created_at desc,2 desc, rand()')
             ->selectRaw(Product::table().".id as product,count(1) as cantidad,i.created_at")
             ->groupBy(Product::table().'.id')
-            ->take(12)
+            ->take(9)
             ->get();
 
     }
