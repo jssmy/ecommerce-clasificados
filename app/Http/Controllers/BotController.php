@@ -41,8 +41,8 @@ class BotController extends Controller
 
     public function processResponse(Request $request){
 
-        if(strtolower($response->requestText) == 'lugar recomendado') {
-            $response->requestText = "$response->requestText. lat $request->lat lng $request->lng";
+        if(strtolower($request->requestText) == 'lugar recomendado') {
+            $request->requestText = "$request->requestText. lat $request->lat lng $request->lng";
         }
         $access = ['credentials'=>'secret-client.json'];
         $sessionsClient = new SessionsClient($access);
