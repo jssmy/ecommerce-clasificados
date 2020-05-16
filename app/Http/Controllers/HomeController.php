@@ -42,25 +42,7 @@ class HomeController extends Controller
 
     public function test(){
 
-        $sitioweb = $this->curl('https://www.olx.com.pe/api/relevance/search?category=832&facet_limit=100&location=1000001&location_facet_limit=20&page=4&user=17133e8fb77x5679657b');  // Ejecuta la función curl escrapeando el sitio web https://devcode.la and regresa el valor a la variable $sitioweb
-        $response  = json_decode($sitioweb);
-        $products = $response->data;
-        dd($products);
-        foreach ($products as $product) {
-            $item = [
-                'name' => $product->title,
-                'description' => $product->description,
-                'price' => $product->price->value->raw,
-                'discount' => 0,
-                'stock' => $product->revision,
-                'category_id' => '1',
-            ];
-            foreach ($product->images as $index => $image) {
-                if($index>6) break;
-                $item["img_url_" . ($index + 1)] = $image->url;
-            }
-            Product::create($item);
-        }
+
     }
     // Definimos la función cURL
     private  function curl($url) {

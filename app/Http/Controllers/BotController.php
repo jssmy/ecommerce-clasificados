@@ -34,17 +34,20 @@ class BotController extends Controller
 	const INPUT_SEARCH_PROMOTIONS='input.search_promotions';
     const MAX_INPUT_UNKNOWN= 3;
     const INPUT_RECOMMENDED='input.recommended';
+    const INPUT_MARKET = 'inpu.market';
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
     ];
 
     public function processResponse(Request $request){
 
+        if(strtolower($response->requestText) == 'lugar recomendado') {
+            $response->requestText = "$response->requestText. lat $request->lat lng $request->lng";
+        }
         $access = ['credentials'=>'secret-client.json'];
         $sessionsClient = new SessionsClient($access);
 
         $session = $sessionsClient->sessionName(env('BOT_PROJECT_ID','ecommerce-bot-mamdbv'),rand(1000,33311212));
-
         $textInput = new TextInput();
         $textInput->setText($request->requestText);
         $textInput->setLanguageCode('es');
@@ -244,6 +247,26 @@ class BotController extends Controller
             $body->payload->items= ['products'=>$products];
 
             return response()->json($body);
+        }else if ($queryResult['action'] == self::INPUT_MARKET) {
+		    $longitud = $params['longitud'] ?: 0;
+		    $latitud = $params['latitud'] ?: 0;
+
+		    $markets = collect();
+		    if($longitud && $latitud){
+                $markets = \DB::table('ubigeo')
+                    ->select('id','name',
+                        \DB::raw("round((6371 * ACOS( 
+                            SIN(RADIANS(lat)) * SIN(RADIANS($latitud)) 
+                            + COS(RADIANS(lng - $longitud)) * COS(RADIANS(lat)) 
+                            * COS(RADIANS($latitud))                                )
+                            ),2) AS distance")  )->get();
+                    $markets = collect($markets);
+            }
+            $fulfillmentMessages = $markets->isEmpty() ? 'No se ha podido encontrar tu ubicacion' : $fulfillmentMessages;
+            $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
+            $body->fulfillmentText		= $fulfillmentText;
+            $body->fulfillmentMessages	= $fulfillmentMessages;
+            $body->payload->items= ['places'=>$markets];
         }
 
     }

@@ -173,12 +173,18 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
         height: 15%;
         padding-top: 10px;
         padding-right: 20px;
-        padding-left: 20pfcardx;
+        padding-left: 20px;
     }
     .card-footer input{
+        /*
         border-radius: 15px;
         border-width: 2px;
+        */
+        width: 90%;
         font-size: 13px;
+        height: 40px;
+        padding: 0px 15px;
+        border: 1px solid transparent;
     }
     .card-expanded{
             display: none !important;
@@ -365,8 +371,21 @@ $url_img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPGUQ8T9FBmG
 		height:30px !important;
 
 	}
+    .input-write{
+        display: flex;
+        width: 100%;
+        border-width: 1px;
+        border: 1px solid #E4E7ED;
+        height: 45px;
+        padding: 2px;
+        border-radius: 10px;
+        align-items: center;
+    }
 
-
+    .input-write i{
+        cursor: pointer;
+        margin-left: 5px;
+    }
 
 </style>
 <!---
@@ -431,7 +450,10 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
             </ul>
         </div>
         <div class="card-footer">
-            <input placeholder="Escribe un mensaje..." class="input input-send">
+            <div class="input-write">
+                <i class="fa fa-bars" title="Menú" aria-hidden="true"></i>
+                <input placeholder="Escribe un mensaje..." class="input input-send">
+            </div>
         </div>
     </div>
 
@@ -485,10 +507,11 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         }
         var writing = function (){
             $('.chat-user-info').find('div').html('<i class="fa fa-circle" aria-hidden="true"></i> escribiendo...');
+            var location = JSON.parse(localStorage.getItem('geo'));
             $.ajax({
                 type: 'get',
                 url : "{{route('bot.request')}}",
-                data: {requestText : valMessage},
+                data: {requestText : valMessage, lat : location ? location.latitude:  0 , lng : location ? location.longitude : 0},
                 success: function (response) {
                     /*
                     if(response.loadSuggest=='input.my_cart'){
@@ -576,17 +599,21 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                     .html()
                     .replace('_content_',text).replace('_time_',formatedTime);
         }
-
-
-        $(document).on('click','.card-option-item-footer button',function () {
-            var message = $(this).parent().data('message');
+        function btnMessage(btn) {
+            var message = $(btn).parent().data('message');
             if(message){
                 valMessage= message;
                 $('.chat-list').append(createSendMessage(valMessage));
-				sendMessage.play();
-				writing();
-				scrollTop();
+                sendMessage.play();
+                writing();
+                scrollTop();
             }
+        }
+        $(document).on('click','.card-option-item-footer button',function () {
+            btnMessage($(this));
+        });
+        $(document).on('click','.btn-message-send', function () {
+            btnMessage($(this));
         });
 
 		/*  check la time writing**/

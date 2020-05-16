@@ -21,14 +21,9 @@
             @includeWhen(auth()->check(),'layouts.messenger.continue.summary',['items'=>$products])
         </form>
 </li>
-@if(auth()->check())
-    <li class='in'>
-            <button class='btn btn-warning-off hide btn-prev-step'>Volver</button>
-            <button
-                data-url_load_summary_information="{{route('bot.load-summary-information')}}"
-                class='btn btn-warning-off btn-next-step'>Continuar compra
-            </button>
-            <a style="min-width: 250px" href="https://www.culqi.com/" target="_blank" class='btn btn-warning-off hide  btn-end-shopp'>Realizar pago</a>
-    </li>
-@endif
+<li data-message="ver mi carrito" class='in'>
+    <button
+        class='btn btn-warning-off btn-message-send'>Continuar compra
+    </button>
+</li>
 @endif
