@@ -1,3 +1,6 @@
+ @php
+ $places = collect($places)->sortBy('distance');
+ @endphp
 <li class="in">
     <div class="card-option-item">
         <div class="card-option-item-content">
