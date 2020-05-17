@@ -1,9 +1,5 @@
-@if(count($places))
 <li class="in">
     <div class="card-option-item">
-        <div  class="card-option-item-header">
-
-        </div>
         <div class="card-option-item-content">
             <ul>
                 @foreach($places as $place)
@@ -13,4 +9,4 @@
         </div>
     </div>
 </li>
-@endif
+
