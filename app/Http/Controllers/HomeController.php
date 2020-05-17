@@ -41,6 +41,19 @@ class HomeController extends Controller
     }
 
     public function test(){
+        $latitud = -12.042417499999999;
+        $longitud = -76.9583889;
+        $markets = \DB::table('ubigeo')
+            ->select('id','name','link',
+                \DB::raw("round((6371 * ACOS( 
+                            SIN(RADIANS(lat)) * SIN(RADIANS($latitud)) 
+                            + COS(RADIANS(lng - $longitud)) * COS(RADIANS(lat)) 
+                            * COS(RADIANS($latitud)))
+                            ),2) AS distance"))
+            ->orderBy('distance')
+            ->take(5)
+            ->get();
+
 
 
     }

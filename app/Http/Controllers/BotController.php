@@ -261,6 +261,7 @@ class BotController extends Controller
                             + COS(RADIANS(lng - $longitud)) * COS(RADIANS(lat)) 
                             * COS(RADIANS($latitud)))
                             ),2) AS distance"))
+                            ->orderBy('distance')
                             ->take(5)
                             ->get();
                     $markets = collect($markets);
