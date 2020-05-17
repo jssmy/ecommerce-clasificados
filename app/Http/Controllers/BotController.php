@@ -83,6 +83,7 @@ class BotController extends Controller
 
         $items = json_decode($items,true);
         $items = self::toObject($items);
+
         $message = $queryResult->getFulfillmentText();
 
         return view('layouts.messenger.response',compact('items','message'));
@@ -258,9 +259,9 @@ class BotController extends Controller
                         \DB::raw("round((6371 * ACOS( 
                             SIN(RADIANS(lat)) * SIN(RADIANS($latitud)) 
                             + COS(RADIANS(lng - $longitud)) * COS(RADIANS(lat)) 
-                            * COS(RADIANS($latitud))                                )
+                            * COS(RADIANS($latitud)))
                             ),2) AS distance")  )->get();
-                    $markets = collect($markets)->where('distance','<=',2);
+                    $markets = collect($markets);
 
             }
             $fulfillmentMessages = $markets->isEmpty() ? 'No se ha podido encontrar tu ubicacion' : $fulfillmentMessages;

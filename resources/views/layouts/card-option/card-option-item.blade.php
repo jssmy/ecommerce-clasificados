@@ -4,7 +4,7 @@
     </div>
     <div class="card-option-item-content">{!! $item->content !!}</div>
     @if($item->footer)
-        <div data-message="{{$item->message}}" class="btn-write-message card-option-item-footer">
+        <div data-message="{{$item->message}}" class="card-option-item-footer">
             {!! $item->footer !!}
         </div>
     @endif
