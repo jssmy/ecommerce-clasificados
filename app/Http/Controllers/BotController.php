@@ -263,8 +263,7 @@ class BotController extends Controller
                             ),2) AS distance"))
                             ->take(5)
                             ->get();
-                    $markets = collect($markets)->sortBy('distance');
-
+                    $markets = collect($markets)->sortByDesc('distance');
             }
             $fulfillmentMessages = $markets->isEmpty() ? 'No se ha podido encontrar tu ubicacion' : $fulfillmentMessages;
             $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
