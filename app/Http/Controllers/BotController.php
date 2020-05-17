@@ -255,7 +255,7 @@ class BotController extends Controller
 		    $markets = collect();
 		    if($longitud && $latitud){
                 $markets = \DB::table('ubigeo')
-                    ->select('id','name',
+                    ->select('id','name','link',
                         \DB::raw("round((6371 * ACOS( 
                             SIN(RADIANS(lat)) * SIN(RADIANS($latitud)) 
                             + COS(RADIANS(lng - $longitud)) * COS(RADIANS(lat)) 
@@ -263,7 +263,7 @@ class BotController extends Controller
                             ),2) AS distance"))
                             ->take(5)
                             ->get();
-                    $markets = collect($markets);
+                    $markets = collect($markets)->sortBy('distance');
 
             }
             $fulfillmentMessages = $markets->isEmpty() ? 'No se ha podido encontrar tu ubicacion' : $fulfillmentMessages;
