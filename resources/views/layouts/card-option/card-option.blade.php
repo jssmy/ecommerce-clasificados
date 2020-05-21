@@ -12,7 +12,7 @@
                     padding-right: 25px;
                     display: flex;
                     justify-content: space-between"
-                    class='btn btn-warning-off btn-message-send'>{{$item->content}} {!! $item->header !!}
+                    class='btn btn-warning-off btn-message-send {{$item->footer}}'>{{$item->content}} {!! $item->header !!}
                 </button>
 
         @endforeach
