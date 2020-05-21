@@ -419,6 +419,9 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         </div>
     </li>
 </script>
+<script id="template-card-option" type="text/template">
+    @include('layouts.card-option.card-option')
+</script>
 <div>
     <div class="float btn-expand"></div>
     <div class="card card-expanded">
@@ -451,7 +454,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         </div>
         <div class="card-footer">
             <div class="input-write">
-                <i class="fa fa-bars" title="Menú" aria-hidden="true"></i>
+                <i class="fa fa-bars btn-menu" title="Menú" aria-hidden="true"></i>
                 <input placeholder="Escribe un mensaje..." class="input input-send">
             </div>
         </div>
@@ -600,7 +603,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                     .replace('_content_',text).replace('_time_',formatedTime);
         }
         function btnMessage(btn) {
-            var message = $(btn).parent().data('message');
+            var message = $(btn).data('message') ? $(btn).data('message') :  $(btn).parent().data('message');
             if(message){
                 valMessage= message;
                 $('.chat-list').append(createSendMessage(valMessage));
@@ -640,8 +643,12 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
         });
 
         $(document).on('click','.search_promotion_intent',function () {
-
             search_intention ='promociones';
+        });
+        $('.btn-menu').click(function () {
+            var menu = $("#template-card-option").html();
+            $('.chat-list').append(menu);
+            scrollTop();
         });
 
     });
