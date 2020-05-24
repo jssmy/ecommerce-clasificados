@@ -61,7 +61,8 @@ class BotController extends Controller
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
         $queryResult = $this->detectUnknow($queryResult);
-        if(in_array($queryResult->getAction(),[self::INPUT_SEARCH_PRODUCTS,
+        if(in_array($queryResult->getAction(),
+            [self::INPUT_SEARCH_PRODUCTS,
             self::INPUT_SEARCH_PROMOTIONS,
             self::INPUT_MY_CART,
             self::INPUT_RECOMMENDED,
@@ -90,13 +91,13 @@ class BotController extends Controller
 
         $items = json_decode($items,true);
         $items = self::toObject($items);
-
+        dd($items);
         $message = $queryResult->getFulfillmentText();
 
         return view('layouts.messenger.response',compact('items','message'));
     }
 
-    private function detectUnknow(QueryResult $queryResult){
+    private function detectUnknow($queryResult){
         if(in_array($queryResult->getAction(),SELF::DETECT_SUGGEST)){
             $intends = Cache::get(session()->getId()) + 1;
             Cache::put(session()->getId(),$intends,now()->addMinutes(6));

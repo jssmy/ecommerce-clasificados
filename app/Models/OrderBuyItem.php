@@ -12,4 +12,7 @@ class OrderBuyItem extends Model
     public function scopeActive($query){
         return $query->where('active',1);
     }
+    public function cartItem(){
+        return $this->hasOne(CartItem::class,'cart_item_id','id');
+    }
 }
