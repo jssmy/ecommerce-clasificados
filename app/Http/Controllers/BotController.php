@@ -283,7 +283,7 @@ class BotController extends Controller
         }else if( $queryResult['action'] == self::INPUT_MY_ORDERS) {
             $user_id    = $params['number'] ?? 0;
             $orders = OrderBuy::active()
-                        ->with('items.cartItem')
+                        //->with('items.cartItem')
                         ->where('user_id',$user_id)
                         ->get();
             $fulfillmentMessages = $orders->isEmpty() ? 'No tiene órdenes generadas' : $fulfillmentMessages;

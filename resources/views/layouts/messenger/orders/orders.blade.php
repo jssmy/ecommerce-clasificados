@@ -6,7 +6,10 @@
         <div class="card-option-item-content">
             <ul>
                 @foreach($orders as $order)
-                    <li>{{$order->code}} - {{$order->total}}}</li>
+                    @php
+                        // $item = collect(collect($order->items)->pluck('cart_item'));
+                    @endphp
+                    <li>{{$order->code}} -  total: {{$item->total}}</li>
                 @endforeach
             </ul>
         </div>

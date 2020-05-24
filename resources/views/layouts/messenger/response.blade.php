@@ -15,4 +15,4 @@
 @includeWhen(isset($items->my_cart),'layouts.messenger.my-cart',['items'=>$items])
 @includeWhen(isset($items->schedule),'layouts.card-option.card-option',['cardOption'=>$items->schedule ?? null])
 @includeWhen(isset($items->places),'layouts.messenger.places.places',['places'=>$items->places ?? null])
-@includeWhen(isset($items->orders),'layouts.messenger.places.places',['orders'=>$items->orders ?? null])
+@includeWhen(isset($items->orders),'layouts.messenger.orders.orders',['orders'=>$items->orders ?? null])
