@@ -14,14 +14,16 @@ class CardOptionItem extends Model
         Log::info($this->card_option_id);
 
         if(SELF::ITEM_SCHEDULE==$this->card_option_id){
-            $ul = '<tr>';
+            $ul = '';
             $schedules = Schedule::get();
             foreach ($schedules as $schedule){
+                $ul .="<tr>";
                 $ul.="<th>$schedule->day</th>";
                 $ul.="<td>$schedule->start</td>";
                 $ul.="<td>$schedule->end</td>";
+                $ul .="</tr>";
             }
-            return $ul = "$ul</tr>";
+            return $ul;
         }
         return $this->getOriginal('content');
     }
