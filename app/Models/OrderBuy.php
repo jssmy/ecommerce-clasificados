@@ -13,6 +13,9 @@ class OrderBuy extends Model
     public function  items(){
         return $this->hasMany(OrderBuyItem::class,'order_id','id');
     }
+    public function cartItem(){
+        return $this->hasOne(CartItem::class,'cart_item_id','id');
+    }
 
     public function scopeActive($query){
         return $query->where('active',1);

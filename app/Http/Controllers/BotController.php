@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderBuy;
+use App\Models\OrderBuyItem;
 use Google\Cloud\Dialogflow\V2\SessionsClient;
 use Google\Cloud\Dialogflow\V2\TextInput;
 use Google\Cloud\Dialogflow\V2\QueryInput;
@@ -35,6 +37,7 @@ class BotController extends Controller
     const MAX_INPUT_UNKNOWN= 3;
     const INPUT_RECOMMENDED='input.recommended';
     const INPUT_MARKET = 'inpu.market';
+    const INPUT_MY_ORDERS = 'input.my_orders';
     const DETECT_SUGGEST =[
         SELF::INPUT_UNKNOWN
     ];
@@ -57,8 +60,12 @@ class BotController extends Controller
 
         $response = $sessionsClient->detectIntent($session, $queryInput);
         $queryResult = $response->getQueryResult();
-
-        if(in_array($queryResult->getAction(),[self::INPUT_SEARCH_PRODUCTS,self::INPUT_SEARCH_PROMOTIONS,self::INPUT_MY_CART,self::INPUT_RECOMMENDED])){
+        $queryResult = $this->detectUnknow($queryResult);
+        if(in_array($queryResult->getAction(),[self::INPUT_SEARCH_PRODUCTS,
+            self::INPUT_SEARCH_PROMOTIONS,
+            self::INPUT_MY_CART,
+            self::INPUT_RECOMMENDED,
+            self::INPUT_MY_ORDERS])){
             $textInput = new TextInput();
             $textInput->setText($request->requestText.'.usuario '.auth()->id());
             $textInput->setLanguageCode('es');
@@ -272,6 +279,17 @@ class BotController extends Controller
             $body->fulfillmentMessages	= $fulfillmentMessages;
             $body->payload->items= ['places'=>$markets];
             return response()->json($body);
+        }else if( $queryResult['action'] == self::INPUT_MY_ORDERS) {
+            $user_id    = $params['number'] ?? 0;
+            $orders = OrderBuy::active()
+                        ->with('items.cartItem')
+                        ->where('user_id',$user_id)
+                        ->get();
+            $fulfillmentMessages = $orders->isEmpty() ? 'No tiene órdenes generadas' : $fulfillmentMessages;
+            $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
+            $body->fulfillmentText		= $fulfillmentText;
+            $body->fulfillmentMessages	= $fulfillmentMessages;
+            $body->payload->items= ['orders'=>$orders];
         }
 
     }
