@@ -21,6 +21,6 @@ class OrderBuy extends Model
     public static  function code(){
         $lasId = SELF::selectRaw('max(id) as id')->first() ;
         $lasId = $lasId->id + 1;
-        return strtolower(config('app.name')).'-'.str_pad($lasId, 10, "0", STR_PAD_LEFT).'-'.now()->year;
+        return strtoupper(config('app.name')).'-'.str_pad($lasId, 6, "0", STR_PAD_LEFT).'-'.now()->year;
     }
 }
