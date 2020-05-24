@@ -169,7 +169,7 @@ class BotController extends Controller
         $items = CartItem::where('user_id',auth()->id())
             ->active()
             ->get();
-        return response()->json(['items'=>$items,'total'=>$items->sum('price_with_discount')]);
+        return response()->json(['items'=>$items,'total'=>round($items->sum('price_with_discount'),2)]);
     }
 
 	public function search(Request $request){
