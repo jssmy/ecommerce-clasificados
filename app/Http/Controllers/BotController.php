@@ -286,7 +286,7 @@ class BotController extends Controller
                         //->with('items.cartItem')
                         ->where('user_id',$user_id)
                         ->get();
-            $fulfillmentMessages = $orders->isEmpty() ? 'No tiene órdenes generadas' : $fulfillmentMessages;
+            $fulfillmentText = $orders->isEmpty() ? 'No tiene órdenes generadas' : $fulfillmentText;
             $fulfillmentMessages[0]['text']['text'][0] = $fulfillmentText;
             $body->fulfillmentText		= $fulfillmentText;
             $body->fulfillmentMessages	= $fulfillmentMessages;
