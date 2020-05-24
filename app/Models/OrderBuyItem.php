@@ -13,6 +13,6 @@ class OrderBuyItem extends Model
         return $query->where('active',1);
     }
     public function cartItem(){
-        return $this->hasOne(CartItem::class,'cart_item_id','id');
+        return $this->hasOne(CartItem::class,'id','cart_item_id');
     }
 }
