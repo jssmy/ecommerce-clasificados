@@ -23,7 +23,20 @@
     <li class="in">
         <div  style="justify-content: center" class="card-option-conent">
             <div class="card-option">
-                @each('layouts.card-option.card-option-item',$items,'item','no-items')
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Día</th>
+                            <th>desde</th>
+                            <th>hasta</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-weight: 500; font-size: 12px">
+                        @foreach($items as $item)
+                            {!! $item->content !!}
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </li>
