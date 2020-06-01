@@ -193,25 +193,27 @@ $(document).ready(function () {
 		 input = $(this).prev();
 	 }
 
-	var quatity = parseInt(input.text());
+     var quatity = parseInt(input.text());
 	 var url = $(this).data('url');
 	 var action = $(this).data('action');
+	 if(quatity<=0 && action === 'remove') {
+	     console.log('removed');
+	     return false;
+	 }
  	$.ajax({
 		url : url,
 		type: 'put',
 		data: {action : action},
 		success: function(){
-			if(action=='remove'){
+			if(action==='remove'){
 				quatity--;
 			}else {
 				quatity++;
 			}
-			if(quatity<=0){
-				btn.parent().html('<i class="fa fa-remove"></i>REMOVIDO');
 
-			}
 			input.text(quatity);
 			window.updateCart();
+            localStorage.setItem('dialog',$('.chat-list').html());
 		}, beforeSend: function(){
 			$('.update-cart-quantity').attr('disabled',true);
 		}, complete: function(){
@@ -222,8 +224,7 @@ $(document).ready(function () {
             }
         }
 	});
-
- 	})
+ 	});
 
 	$(document).on('click','.btn-next-step',function(){
 

@@ -12,7 +12,6 @@ use Carbon\Carbon;
 class Product extends  Entity
 {
     CONST MAX_LONG_NAME=30;
-    protected $primaryKey='id';
     protected $table='products';
     protected $guarded=['id'];
     protected $appends=['price_with_discount',

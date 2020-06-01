@@ -12,7 +12,8 @@ class CartItem extends Model
     protected $appends=['price_with_discount'];
 
     public function scopeActive($query){
-        return $query->where('active',1)->where('quatity','>',0);
+        return $query->where('active',1)
+                    ->where('quatity','>',0);
     }
 
     public function scopeOwn($q){

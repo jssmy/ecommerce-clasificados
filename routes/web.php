@@ -18,11 +18,14 @@ Route::group(['middleware'=>'auth'],function (){
             ->middleware('product.interaction')
             ->name('cart.add-cart');
 
+        Route::put('product-remove/{product}','CartController@removeFromCart')
+            ->name('cart.remove-cart');
+
         Route::get('detail-cart','CartController@detailCart')->name('cart.detail-items');
 
         Route::put('delete-from-cart/{item}','CartController@deleteFromCart')->name('delete-from-cart');
 
-		Route::put('update-cart-quantity/{item}','CartController@updateQuantity')->name('update-cart-quantity');
+		Route::put('update-cart-quantity/{item?}','CartController@updateQuantity')->name('update-cart-quantity');
 
 		Route::post('generate-order','CartController@generateOrder')->name('generate.order');
 

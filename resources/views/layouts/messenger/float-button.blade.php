@@ -487,6 +487,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
                 localStorage.setItem('dialog',$('.chat-list').html());
                 scrollTop();
 				newMessage.play();
+                localStorage.setItem('dialog',$('.chat-list').html());
             });
         }
 
@@ -649,6 +650,7 @@ https://images-na.ssl-images-amazon.com/images/I/41BKzQf2GmL.png'
             var menu = $("#template-card-option").html();
             $('.chat-list').append(menu);
             scrollTop();
+            localStorage.setItem('dialog',$('.chat-list').html());
         });
 
     });

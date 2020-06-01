@@ -2,7 +2,7 @@
     <div style='min-height: 76%;' class="card-option-item-content">
         <div class='card-accion'>
             <button data-action='remove'
-                    data-url="{{route('cart.add-cart',$product->id)}}"
+                    data-url="{{route('cart.remove-cart',$product->id)}}"
                     class='btn btn-remove-product update-cart-quantity'><i class="fa fa-minus" aria-hidden="true"></i>
             </button>
             <div class='card-input-quatity'>{{$product->item_cart ? $product->item_cart->quatity : 0}}</div>

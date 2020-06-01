@@ -11,7 +11,7 @@ use App\Http\Requests\AddCartRequest;
 class CartController extends Controller
 {
     //
-    public function addToCart(AddCartRequest $request,Product $product){
+    public function addToCart(Request $request,Product $product){
         $quantity  = $request->quantity ? : 1;
         $cart = CartItem::where('product_id',$product->id)
                 ->where('user_id',auth()->id())
@@ -23,7 +23,6 @@ class CartController extends Controller
             $cart->quatity = $quantity;
             $cart->save();
             return view('layouts.cart.direct-access');
-
         }
 
         CartItem::create([
@@ -34,9 +33,25 @@ class CartController extends Controller
             'discount'=>$product->discount,
             'quatity'=>$quantity
         ]);
-
         return view('layouts.cart.direct-access');
+    }
 
+    public function  removeFromCart(Request $request, Product $product) {
+        /* se econtró el producto*/
+        if($product->id) {
+            $cart = CartItem::where('product_id',$product->id)
+                ->where('user_id',auth()->id())
+                ->active()
+                ->first();
+
+
+            if($cart){
+                $cart->quatity--;
+                $cart->save();
+            }
+            return response()->json(['cart_item'=>$cart]);
+        }
+        return response()->json(['cart_item'=>null]);
     }
 
     public function detailCart(){
